@@ -1,5 +1,5 @@
 # API LIST
-## sign up
+## Sign up
 __Request__
 * Line: POST /signup
 * Body: {username: xxx, pwd: xxx}
