@@ -3,6 +3,7 @@
 __Request__
 * Line: POST /signup
 * Body: {username: xxx, pwd: xxx}
+
 __Response__
 * {"success": 0}
 * {"success": 1}
@@ -10,6 +11,7 @@ __Response__
 __Request__
 * Line: POST /login
 * Body: {username: xxx, pwd: xxx}
+
 __Response__
 * {"success": 0}
 * {"success": 1}
