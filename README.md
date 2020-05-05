@@ -34,10 +34,27 @@ __Response__
 * {"login": 0} (which means the user haven't logged in)
 * {"pwdChanged": 1}
 
-## View favourite
+## Add a stop to one's favourite
 __Request__
-* Line: GET/favourite
+* Line: PUT /favourite/:stopname
 
 __Response__
 * {"login": 0}
-* (favourite list): [stopname1, stopname2, ....]
+* {"stopAdded": 1}
+
+## View one's favourite
+__Request__
+* Line: GET /favourite
+
+__Response__
+* {"login": 0}
+* (favourite list): [ "stopname1", "stopname2", ....]
+
+## Remove a stop from one's favourite list
+__Request__
+* Line: DELETE /favourite/:stopname
+
+__Response__
+* {"login": 0}
+* {'stopRemoved': 1} (remove successfully)
+* {'inFavourite': 0} (unable to remove it because it's not in one's favourite)

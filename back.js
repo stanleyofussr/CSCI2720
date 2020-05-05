@@ -36,7 +36,7 @@ var Schema = mongoose.Schema;
 var UserSchema = Schema({
 	username: { type: String, require: true, unique: true },
 	pwd: { type: String, require: true },
-	favourite: [{ stopname: String }]
+	favourite: [{ type: String }]
 });
 var StopSchema = Schema({
 	stopname: { type: String, require: true, unique: true }, 
@@ -109,7 +109,7 @@ app.put('/changePwd', (req, res) => {
 		var pwd = req.body.pwd;
 		var conditions = { username: req.session.username };
 		var update = { $set: { pwd: req.body.pwd }};
-		UserModel.update(conditions, update, (err, result) => {
+		UserModel.updateOne(conditions, update, (err, result) => {
 			if(err)
 				return handleError(err);
 			res.send({ 'pwdChanged': 1});
@@ -118,32 +118,46 @@ app.put('/changePwd', (req, res) => {
 		res.send({ 'login': 0 });
 	}
 })
-/*****
+/* add a favourite stop */
 app.put('/favourite/:stopname', (req, res) => {
 	if(req.session.username != undefined) {
 		var conditions = { username: req.session.username };
 		var update = { $addToSet: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
-			res.send(result);
+			if(err)
+				return handleError(err);
+			res.send({ 'stopAdded': 1});
 		});
 	} else {
 		res.send({ 'login': 0 });
 	}
 });
-*/
-
+/* get one's favourite list */
 app.get('/favourite', (req, res) => {
 	if(req.session.username != undefined) {
-		UserModel.find({ username: req.session.username }, (err, result) => {
+		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			res.send(result.favourite);
 		});
 	} else {
 		res.send({ 'login': 0 });
 	}
 });
-
-app.delete('/stop/:stopname', (req, res) => {
-
+/* remove a stopname from one's favourite list*/
+app.delete('/favourite/:stopname', (req, res) => {
+	if(req.session.username != undefined) {
+		var conditions = { username: req.session.username };
+		var update = { $pull: { favourite: req.params.stopname }};
+		UserModel.update(conditions, update, (err, result) => {
+			if(err)
+				return handleError(err);
+			if(result.nModified != 0)
+				res.send({ 'stopRemoved': 1 });
+			else 
+				res.send({ 'inFavourite': 0});
+		});
+	} else {
+		res.send({ 'login': 0 });
+	}
 });
 
 app.listen(8000);
