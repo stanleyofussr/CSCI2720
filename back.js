@@ -3,19 +3,11 @@ var mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-// var crypto = require('crypto'); 
 
 /* define app to use express */
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
-/*crypto.randomBytes(128, (err, buf) => {
-	if (err) return;
-	console.log(buf);
-	app.use(session({
-		secret: buf,
-		cookie: { maxAge: 1000*60*60 } // expire in 1 hour
-	}));
-});*/
+
 app.use(session({
 	secret: 'csci2720',
 	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
@@ -136,6 +128,8 @@ app.put('/favourite/:stopname', (req, res) => {
 app.get('/favourite', (req, res) => {
 	if(req.session.username != undefined) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
+			if(err)
+				return handleError(err);
 			res.send(result.favourite);
 		});
 	} else {
@@ -159,6 +153,53 @@ app.delete('/favourite/:stopname', (req, res) => {
 		res.send({ 'login': 0 });
 	}
 });
+
+
+
+/**** below are all for admin ****/
+/* admin log in */
+app.post('/adminLogIn', (req, res) => {
+	req.session.admin = true;
+	res.send({ 'login': 1});
+});
+
+/* admin log out */
+/* same as user */
+
+/* admin delete a user */
+app.delete('/user/:username', (req, res) => {
+	if(req.session.admin != undefined) {
+		UserModel.remove({ username: req.params.username}, (err, result) => {
+			if(err)
+				return handleError(err);
+			if(result.deletedCount == 0)
+				res.send({ 'deleted': 0 });
+			else
+				res.send({ 'deleted': 1 });
+		})
+	} else {
+		res.send({ 'authority': 0 });
+	}
+});
+
+/* admin delete a bus stop */
+app.delete('/stop/:stopname', (req, res) => {
+	if(req.session.admin != undefined) {
+		UserModel.remove({ stopname: req.params.stopname}, (err, result) => {
+			if(err)
+				return handleError(err);
+			if(result.deletedCount == 0)
+				res.send({ 'deleted': 0 });
+			else
+				res.send({ 'deleted': 1 });
+		})
+	} else {
+		res.send({ 'authority': 0 });
+	}
+});
+
+/* flush stop data */
+
 
 app.listen(8000);
 
