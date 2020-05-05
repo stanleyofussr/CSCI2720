@@ -56,12 +56,14 @@ UserModel = mongoose.model('User', UserSchema);
 StopModel = mongoose.model('Stop', StopSchema);
 RouteModel = mongoose.model('Route', RouteSchema); // can be ommited
 
-/* receive http request */
+/****** receive http request ******/
+/* set header */
 app.all('/', (req, res) => {
 	/* set response header */
 	res.setHeader('Content-Type', 'application/json');
 });
 
+/* sign up */
 app.post('/signup', (req, res) => {
 	var username = req.body.username;
 	var pwd = req.body.pwd;
@@ -80,7 +82,7 @@ app.post('/signup', (req, res) => {
 		}
 	});
 });
-
+/* log in */
 app.post('/login', (req, res) => {
 	var username = req.body.username;
 	var pwd = req.body.pwd;
@@ -95,13 +97,27 @@ app.post('/login', (req, res) => {
 			res.send({"login": 0});
 	});
 });
-
+/* log out */
 app.post('/logout', (req, res) => {
 	req.session.destroy(() => {
 		res.send({"logout": 1});
 	});
 });
-
+/* change password */
+app.put('/changePwd', (req, res) => {
+	if(req.session.username != undefined) {
+		var pwd = req.body.pwd;
+		var conditions = { username: req.session.username };
+		var update = { $set: { pwd: req.body.pwd }};
+		UserModel.update(conditions, update, (err, result) => {
+			if(err)
+				return handleError(err);
+			res.send({ 'pwdChanged': 1});
+		})
+	} else {
+		res.send({ 'login': 0 });
+	}
+})
 /*****
 app.put('/favourite/:stopname', (req, res) => {
 	if(req.session.username != undefined) {
