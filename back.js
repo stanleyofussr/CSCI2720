@@ -2,10 +2,24 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+// var crypto = require('crypto'); 
 
 /* define app to use express */
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
+/*crypto.randomBytes(128, (err, buf) => {
+	if (err) return;
+	console.log(buf);
+	app.use(session({
+		secret: buf,
+		cookie: { maxAge: 1000*60*60 } // expire in 1 hour
+	}));
+});*/
+app.use(session({
+	secret: 'csci2720',
+	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
+}));
 
 /* connect to mongodb */
 var mongodb = "mongodb://localhost:27017/csci2720";
@@ -46,7 +60,6 @@ RouteModel = mongoose.model('Route', RouteSchema); // can be ommited
 app.all('/', (req, res) => {
 	/* set response header */
 	res.setHeader('Content-Type', 'application/json');
-	next();
 });
 
 app.post('/signup', (req, res) => {
@@ -56,13 +69,13 @@ app.post('/signup', (req, res) => {
 		if(err)
 			return handleError(err);
 		if(result)
-			res.send({"success": 0});
+			res.send({"signup": 0});
 		else {
 			UserModel.create({ username: username, pwd: pwd}, (err, result) => {
 				if(err)
 					return handleError(err);
 				else
-					res.send({"success": 1});
+					res.send({"signup": 1});
 			});
 		}
 	});
@@ -74,16 +87,50 @@ app.post('/login', (req, res) => {
 	UserModel.findOne({ username: username, pwd: pwd }, (err, result) => {
 		if(err)
 			return handleError(err);
-		if(result)
-			res.send({"success": 1});
+		if(result) {
+			req.session.username = username;
+			res.send({"login": 1});
+		}
 		else 
-			res.send({"success": 0});
+			res.send({"login": 0});
 	});
 });
 
+app.post('/logout', (req, res) => {
+	req.session.destroy(() => {
+		res.send({"logout": 1});
+	});
+});
 
+/*****
+app.put('/favourite/:stopname', (req, res) => {
+	if(req.session.username != undefined) {
+		var conditions = { username: req.session.username };
+		var update = { $addToSet: { favourite: req.params.stopname }};
+		UserModel.update(conditions, update, (err, result) => {
+			res.send(result);
+		});
+	} else {
+		res.send({ 'login': 0 });
+	}
+});
+*/
 
-var server = app.listen(8000);
+app.get('/favourite', (req, res) => {
+	if(req.session.username != undefined) {
+		UserModel.find({ username: req.session.username }, (err, result) => {
+			res.send(result.favourite);
+		});
+	} else {
+		res.send({ 'login': 0 });
+	}
+});
+
+app.delete('/stop/:stopname', (req, res) => {
+
+});
+
+app.listen(8000);
 
 
 
