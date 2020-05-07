@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var http = require('http');
 
 /* define app to use express */
 var app = express();
@@ -52,7 +53,11 @@ RouteModel = mongoose.model('Route', RouteSchema); // can be ommited
 /* set header */
 app.all('/', (req, res) => {
 	/* set response header */
+	res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE, POST");
+    res.setHeader("Access-Control-Allow-Headers", "*");
 	res.setHeader('Content-Type', 'application/json');
+	next();
 });
 
 /* sign up */
