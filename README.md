@@ -15,8 +15,8 @@ __Request__
 * Body: {"username": xxx, "pwd": xxx}
 
 __Response__
-* {"login": 0}
-* {"login": 1}
+* {"username": null}
+* {"username": "xxxxx"}
 
 ## Log out as a user or an admin
 __Request__
