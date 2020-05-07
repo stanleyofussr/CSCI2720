@@ -94,6 +94,21 @@ app.post('/login', (req, res) => {
 			res.send({"login": 0});
 	});
 });
+/* get username */
+app.get('/username', (req, res) => {
+	if(req.session.username != undefined) {
+		UserModel.findOne({ username: username }, (err, result) => {
+			if(err)
+				return console.log(err);
+			if(result)
+				res.send({"username": req.session.username});
+			else 
+				res.send({"username": null});
+		});
+	} else {
+		res.send({ 'username': null });
+	}
+})
 /* log out */
 app.post('/logout', (req, res) => {
 	req.session.destroy(() => {

@@ -1,5 +1,4 @@
 /* include only navigation bar */
-
 class LogInOut extends React.Component {
 	render() {
 		if(false) // haven't logged in
@@ -16,8 +15,6 @@ class LogInOut extends React.Component {
 	}
 }
 
-ReactDOM.render(<LogInOut/>, document.querySelector("#logInOut"));
-
 class SignUp extends React.Component {
 	render() {
 		if(true) // haven't logged in
@@ -30,7 +27,13 @@ class SignUp extends React.Component {
 	}
 }
 
-ReactDOM.render(<SignUp/>, document.querySelector("#signUp"));
+class LogInStatus extends React.Component {
+	render() {
+		
+	}
+}
+
+ReactDOM.render(<LogInStatus/>, document.querySelector("#logStatus"));
 
 
 
