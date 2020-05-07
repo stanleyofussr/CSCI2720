@@ -4,12 +4,8 @@ class LogIn extends React.Component {
 	    super(props);
 	    this.state = {hover: false}
 	}
-	enter = e => {
-	    this.setState({hover: true});
-	}
-	leave = e => {
-	    this.setState({hover: false});
-	}
+	enter = e => {this.setState({hover: true});}
+	leave = e => {this.setState({hover: false});}
 	render() {
 		return (
 			<span className="logIcon" onMouseEnter={(e) => this.enter(e)} onMouseLeave={(e) => this.leave(e)}>
@@ -27,13 +23,8 @@ class LogOut extends React.Component {
 	    super(props);
 	    this.state = {hover: false}
 	}
-	enter = e => {
-	    this.setState({hover: true});
-	    console.log("enter");
-	}
-	leave = e => {
-	    this.setState({hover: false});
-	}
+	enter = e => {this.setState({hover: true});}
+	leave = e => {this.setState({hover: false});}
 	render() {
 		return (
 			<span className="logIcon" onMouseEnter={(e) => this.enter(e)} onMouseLeave={(e) => this.leave(e)}>
@@ -51,12 +42,8 @@ class SignUp extends React.Component {
 	    super(props);
 	    this.state = {hover: false}
 	}
-	enter = e => {
-	    this.setState({hover: true});
-	}
-	leave = e => {
-	    this.setState({hover: false});
-	}
+	enter = e => {this.setState({hover: true});}
+	leave = e => {this.setState({hover: false});}
 	render() {
 		return (
 			<span className="logIcon" onMouseEnter={(e) => this.enter(e)} onMouseLeave={(e) => this.leave(e)}>
@@ -72,26 +59,34 @@ class SignUp extends React.Component {
 class LogInStatus extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null};
+		this.state = {username: null, admin: null};
 		fetch('http://localhost:8000/username', {
 			method: 'get',
 		})
 		.then(res => res.json())
 		.then(data => {
-			this.setState({username: data.username});
+			this.setState({username: data.username, admin: data.admin});
 		});
 	}
 	render() {
+		if(this.state.admin == null)
+			return (
+				<span>
+					{this.state.username == null ? <SignUp/> : <a>this.state.username</a>}
+					{this.state.username == null ? <LogIn/> : <LogOut/>}
+				</span>
+			);
 		return (
 			<span>
-				{this.state.username == null ? <SignUp/> : <a>this.state.username</a>}
-				{this.state.username == null ? <LogIn/> : <LogOut/>}
+				<a>{"Admin"}</a>
+				<LogOut/>
 			</span>
 		);
 	}
 }
 
 ReactDOM.render(<LogInStatus/>, document.querySelector("#logStatus"));
+
 
 
 

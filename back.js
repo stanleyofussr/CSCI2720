@@ -97,17 +97,19 @@ app.post('/login', (req, res) => {
 });
 /* get username */
 app.get('/username', (req, res) => {
-	if(req.session.username != undefined) {
+	if(req.session.admin != undefined) {
+		res.send({'admin': true});
+	} else if(req.session.username != undefined) {
 		UserModel.findOne({ username: username }, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result)
-				res.send({'username': req.session.username});
+				res.send({'username': req.session.username, 'admin': null});
 			else 
-				res.send({'username': null});
+				res.send({'username': null, 'admin': null});
 		});
 	} else {
-		res.send({'username': null});
+		res.send({'username': null, 'admin': null});
 	}
 })
 /* log out */
