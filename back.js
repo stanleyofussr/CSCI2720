@@ -66,13 +66,13 @@ app.post('/signup', (req, res) => {
 	var pwd = req.body.pwd;
 	UserModel.findOne({ username: username }, (err, result) => {
 		if(err)
-			return handleError(err);
+			return console.log(err);
 		if(result)
 			res.send({"signup": 0});
 		else {
 			UserModel.create({ username: username, pwd: pwd}, (err, result) => {
 				if(err)
-					return handleError(err);
+					return console.log(err);
 				else
 					res.send({"signup": 1});
 			});
@@ -85,7 +85,7 @@ app.post('/login', (req, res) => {
 	var pwd = req.body.pwd;
 	UserModel.findOne({ username: username, pwd: pwd }, (err, result) => {
 		if(err)
-			return handleError(err);
+			return console.log(err);
 		if(result) {
 			req.session.username = username;
 			res.send({"login": 1});
@@ -108,7 +108,7 @@ app.put('/changePwd', (req, res) => {
 		var update = { $set: { pwd: req.body.pwd }};
 		UserModel.updateOne(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send({ 'pwdChanged': 1});
 		})
 	} else {
@@ -122,7 +122,7 @@ app.put('/favourite/:stopname', (req, res) => {
 		var update = { $addToSet: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send({ 'stopAdded': 1});
 		});
 	} else {
@@ -134,7 +134,7 @@ app.get('/favourite', (req, res) => {
 	if(req.session.username != undefined) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send(result.favourite);
 		});
 	} else {
@@ -148,7 +148,7 @@ app.delete('/favourite/:stopname', (req, res) => {
 		var update = { $pull: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.nModified != 0)
 				res.send({ 'stopRemoved': 1 });
 			else 
@@ -176,7 +176,7 @@ app.delete('/user/:username', (req, res) => {
 	if(req.session.admin != undefined) {
 		UserModel.remove({ username: req.params.username}, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.deletedCount == 0)
 				res.send({ 'deleted': 0 });
 			else
@@ -192,7 +192,7 @@ app.delete('/stop/:stopname', (req, res) => {
 	if(req.session.admin != undefined) {
 		UserModel.remove({ stopname: req.params.stopname}, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.deletedCount == 0)
 				res.send({ 'deleted': 0 });
 			else
@@ -201,6 +201,31 @@ app.delete('/stop/:stopname', (req, res) => {
 	} else {
 		res.send({ 'authority': 0 });
 	}
+});
+
+/* admin get all bus stop */
+app.get('/stop', (req, res) => {
+	if(req.session.admin != undefined || req.session.username != undefined) {
+		StopModel.find({}, (err, result) => {
+			if(err)
+				return console.log(err);
+			res.send(result);
+		});
+	} else {
+		res.send({ 'login': 0 });
+	}
+	
+});
+
+/* for test only */
+app.post('/stop', (req, res) => {
+	StopModel.create({stopname: "test", longtitude: 50, latitude: 30, 
+		arrival: [{route: "route1", time: "2020-01-01"}, {route: "route2", time: "2020-01-01"}],
+		comment: [{body: "hahaha", username: "user1"}, {body: "ssss", username: "user2"}]   }, (err, result) => {
+		if(err)
+			return console.log(err);
+		res.send({"created": 1});
+	});
 });
 
 /* flush stop data */
