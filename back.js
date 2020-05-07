@@ -1,18 +1,19 @@
 /* require modules */
-var mongoose = require('mongoose');
-var express = require('express');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var http = require('http');
+var mongoose = require('mongoose')
+var express = require('express')
+var bodyParser = require('body-parser')
+var session = require('express-session')
+var http = require('http')
+var cors = require('cors')
 
 /* define app to use express */
-var app = express();
-app.use(bodyParser.urlencoded({extended: false}));
-
+var app = express()
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(cors())
 app.use(session({
 	secret: 'csci2720',
 	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
-}));
+}))
 
 /* connect to mongodb */
 var mongodb = "mongodb://localhost:27017/csci2720";
