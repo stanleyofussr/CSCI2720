@@ -16,7 +16,7 @@ app.use(session({
 }))
 
 /* connect to mongodb */
-var mongodb = "mongodb://localhost:27017/csci2720";
+var mongodb = 'mongodb://localhost:27017/csci2720';
 mongoose.set('useCreateIndex', true);
 mongoose.connect(mongodb, { useNewUrlParser: true });
 var db = mongoose.connection;
@@ -54,9 +54,9 @@ RouteModel = mongoose.model('Route', RouteSchema); // can be ommited
 /* set header */
 app.all('/', (req, res) => {
 	/* set response header */
-	res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE, POST");
-    res.setHeader("Access-Control-Allow-Headers", "*");
+	res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 	res.setHeader('Content-Type', 'application/json');
 	next();
 });
@@ -69,13 +69,13 @@ app.post('/signup', (req, res) => {
 		if(err)
 			return console.log(err);
 		if(result)
-			res.send({"signup": 0});
+			res.send({'signup': 0});
 		else {
 			UserModel.create({ username: username, pwd: pwd}, (err, result) => {
 				if(err)
 					return console.log(err);
 				else
-					res.send({"signup": 1});
+					res.send({'signup': 1});
 			});
 		}
 	});
@@ -89,10 +89,10 @@ app.post('/login', (req, res) => {
 			return console.log(err);
 		if(result) {
 			req.session.username = username;
-			res.send({"login": 1});
+			res.send({'login': 1});
 		}
 		else 
-			res.send({"login": 0});
+			res.send({'login': 0});
 	});
 });
 /* get username */
@@ -102,18 +102,18 @@ app.get('/username', (req, res) => {
 			if(err)
 				return console.log(err);
 			if(result)
-				res.send({"username": req.session.username});
+				res.send({'username': req.session.username});
 			else 
-				res.send({"username": null});
+				res.send({'username': null});
 		});
 	} else {
-		res.send({ 'username': null });
+		res.send({'username': null});
 	}
 })
 /* log out */
 app.post('/logout', (req, res) => {
 	req.session.destroy(() => {
-		res.send({"logout": 1});
+		res.send({'logout': 1});
 	});
 });
 /* change password */
@@ -235,12 +235,12 @@ app.get('/stop', (req, res) => {
 
 /* for test only */
 app.post('/stop', (req, res) => {
-	StopModel.create({stopname: "test", longtitude: 50, latitude: 30, 
-		arrival: [{route: "route1", time: "2020-01-01"}, {route: "route2", time: "2020-01-01"}],
-		comment: [{body: "hahaha", username: "user1"}, {body: "ssss", username: "user2"}]   }, (err, result) => {
+	StopModel.create({stopname: 'test', longtitude: 50, latitude: 30, 
+		arrival: [{route: 'route1', time: '2020-01-01'}, {route: 'route2', time: '2020-01-01'}],
+		comment: [{body: 'hahaha', username: 'user1'}, {body: 'ssss', username: 'user2'}]   }, (err, result) => {
 		if(err)
 			return console.log(err);
-		res.send({"created": 1});
+		res.send({'created': 1});
 	});
 });
 
