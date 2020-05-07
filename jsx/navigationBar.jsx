@@ -4,4 +4,4 @@ class NavigationBar extends React.Component {
 		return <p>navigation bar</p>;
 	}
 }
-ReactDOM.render(<NavigationBar/>, document.querySelector("#app"));
+ReactDOM.render(<NavigationBar/>, document.querySelector("#navigationBar"));
