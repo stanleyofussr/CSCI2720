@@ -178,14 +178,12 @@ app.delete('/favourite/:stopname', (req, res) => {
 	}
 });
 
-
-
 /**** below are all for admin ****/
 /* admin log in */
-app.post('/adminLogIn', (req, res) => {
+app.get('/adminLogIn', (req, res) => {
 	req.session.admin = true;
 	req.session.username = null;
-	res.send({ 'login': 1});
+	res.send({ 'admin': true, 'username': null});
 });
 
 /* admin log out */
