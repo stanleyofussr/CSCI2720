@@ -5,7 +5,7 @@ import ShowList from "./stopList.js"
 class NavigationBar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: null};
+		this.state = {username: null, admin: null, page: null};
 		/* get login status and identify */
 		fetch('http://localhost:8000/username', {
 			method: 'get',
@@ -17,6 +17,7 @@ class NavigationBar extends React.Component {
 			this.setState({username: data.username, admin: data.admin});
 		});
 	}
+
 	/* test login */
 	login = () => {
 		var details = {
@@ -45,6 +46,7 @@ class NavigationBar extends React.Component {
 			this.setState({username: data.username});
 		});
 	}
+
 	/* test logout */
 	logout = () => {
 		fetch('http://localhost:8000/logout', {
@@ -68,15 +70,18 @@ class NavigationBar extends React.Component {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav mr-auto">
+						{this.state.admin==null&&this.state.username==null ? null:
 						<li className="active" style={{margin: "auto 5px"}}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Stops"}<span className="sr-only">(current)</span></a>
-						</li>
+						</li>}
+						{this.state.admin==null&&this.state.username==null ? null:
 						<li style={{margin: "auto 5px"}}>
-							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Favourite"}</a>
-						</li>
-						<form className="form-inline" style={{margin: "10px"}}>
+							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.state.admin==null?"Favourite":"Users"}</a>
+						</li>}
+						{this.state.admin==null&&this.state.username==null ? null:
+						<form className="form-inline">
 	    					<input className="form-control mr-sm-2" type="search" placeholder="Search"/>
-	  					</form>
+	  					</form>}
 					</ul>
 					<LogInStatus username={this.state.username} admin={this.state.admin} login={this.login} logout={this.logout}/>
 				</div>
@@ -84,7 +89,6 @@ class NavigationBar extends React.Component {
 		);
 	}
 }
-
 
 class LogInStatus extends React.Component {
 	
