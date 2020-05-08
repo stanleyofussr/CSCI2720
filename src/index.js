@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import cookie from "react-cookie";
 import $ from  'jquery'
-import "./stopList.js"
+import ShowList from "./stopList.js"
 
 class LogIn extends React.Component {
 	constructor(props){
@@ -134,3 +134,4 @@ class LogInStatus extends React.Component {
 }
 
 ReactDOM.render(<LogInStatus/>, document.querySelector("#logStatus"));
+ReactDOM.render(<ShowList/>, document.querySelector("#stopList"));

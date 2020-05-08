@@ -8,7 +8,7 @@ const testData = [
     { _objectID: "asdf", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
 ];
 
-class ShowList extends React.Component {
+export default class ShowList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,4 +55,3 @@ class StopItem extends React.Component {
     }
 }
 
-ReactDOM.render(<ShowList />, document.getElementById('stopList'))
