@@ -162,4 +162,4 @@ class SignUp extends React.Component {
 }
 
 ReactDOM.render(<NavigationBar/>, document.querySelector("#navigationBar"));
-ReactDOM.render(<ShowList/>, document.querySelector("#stopList"));
+ReactDOM.render(<ShowList search = "long" page = 'favorite'/>, document.querySelector("#stopList"));

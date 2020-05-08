@@ -8,21 +8,32 @@ const testData = [
     { _objectID: "asdf", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
 ];
 
-export default class ShowList extends React.Component {
+export default class stopList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             searchInput : this.props.search,
             favorite: this.props.favorite,
             stopListData: testData,
+            filteredData: testData.filter(item => {
+                if (item.stopname.toLowerCase().includes(this.props.search.toLowerCase()))
+                    return true;
+                return false;
+            }),
+            favorite: (this.props.page == 'favorite')
         };
     }
+
+    
+
+
 
     render() {
         return (
             <div className="container">
                 <div className="card-columns mt-3 text-center">
-                    {this.state.stopListData.map(stop =>
+                    
+                    {this.state.filteredData.map(stop =>
                         <StopItem stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length} />
                     )}
                 </div>
