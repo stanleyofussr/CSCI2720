@@ -80,7 +80,7 @@ app.post('/signup', (req, res) => {
 		}
 	});
 });
-/* log in */
+/* log in as a user*/
 app.post('/login', (req, res) => {
 	var username = req.body.username;
 	var pwd = req.body.pwd;
@@ -89,6 +89,7 @@ app.post('/login', (req, res) => {
 			return console.log(err);
 		if(result) {
 			req.session.username = username;
+			req.session.admin = false;
 			res.send({'username': username});
 		}
 		else 
@@ -97,19 +98,19 @@ app.post('/login', (req, res) => {
 });
 /* get username */
 app.get('/username', (req, res) => {
-	if(req.session.admin != undefined) {
-		res.send({'admin': true});
-	} else if(req.session.username != undefined) {
+	if(req.session.admin == true) {
+		res.send({'username': null, 'admin': true});
+	} else if(req.session.username != undefined && req.session.username != null) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result)
-				res.send({'username': req.session.username, 'admin': null});
+				res.send({'username': req.session.username, 'admin': false});
 			else 
-				res.send({'username': null, 'admin': null});
+				res.send({'username': null, 'admin': false});
 		});
 	} else {
-		res.send({'username': null, 'admin': null});
+		res.send({'username': null, 'admin': false});
 	}
 })
 /* log out */
@@ -120,7 +121,7 @@ app.post('/logout', (req, res) => {
 });
 /* change password */
 app.put('/changePwd', (req, res) => {
-	if(req.session.username != undefined) {
+	if(req.session.username != undefined && req.session.username != null) {
 		var pwd = req.body.pwd;
 		var conditions = { username: req.session.username };
 		var update = { $set: { pwd: req.body.pwd }};
@@ -183,6 +184,7 @@ app.delete('/favourite/:stopname', (req, res) => {
 /* admin log in */
 app.post('/adminLogIn', (req, res) => {
 	req.session.admin = true;
+	req.session.username = null;
 	res.send({ 'login': 1});
 });
 
@@ -191,7 +193,7 @@ app.post('/adminLogIn', (req, res) => {
 
 /* admin delete a user */
 app.delete('/user/:username', (req, res) => {
-	if(req.session.admin != undefined) {
+	if(req.session.admin == true) {
 		UserModel.remove({ username: req.params.username}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -207,7 +209,7 @@ app.delete('/user/:username', (req, res) => {
 
 /* admin delete a bus stop */
 app.delete('/stop/:stopname', (req, res) => {
-	if(req.session.admin != undefined) {
+	if(req.session.admin == true) {
 		UserModel.remove({ stopname: req.params.stopname}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -221,9 +223,9 @@ app.delete('/stop/:stopname', (req, res) => {
 	}
 });
 
-/* admin get all bus stop */
+/* get all bus stop */
 app.get('/stop', (req, res) => {
-	if(req.session.admin != undefined || req.session.username != undefined) {
+	if(req.session.admin == true || (req.session.username != null && req.session.username != undefined)) {
 		StopModel.find({}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -232,7 +234,6 @@ app.get('/stop', (req, res) => {
 	} else {
 		res.send({ 'login': 0 });
 	}
-	
 });
 
 /* for test only */
