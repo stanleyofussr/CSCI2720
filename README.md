@@ -15,8 +15,8 @@ __Request__
 * Body: {"username": xxx, "pwd": xxx}
 
 __Response__
-* {"username": null}
-* {"username": "xxxxx"}
+* {"username": null, "admin": false}
+* {"username": "xxxxx", "admin": false}
 
 ## Log out as a user or an admin
 __Request__
@@ -42,7 +42,7 @@ __Response__
 * {"login": 0}
 * {"stopAdded": 1}
 
-## View one's favourite stop list
+## Get one's favourite stop list
 __Request__
 * Line: GET /favourite
 
@@ -83,3 +83,16 @@ __Response__
 * {'authority': 0} (you are not an admin)
 * {'deleted': 1} (remove successfully)
 * {'deleted': 0} (unable to delete it because it's not in db)
+
+## Get all bus stops
+__Request__
+* Line: GET /stop
+
+__Response__
+* {'login': 0}
+* stop list, same as format in db
+
+Note: You can use the test API "POST /stop" to add a default stop to db and then use "GET /stop" to see the return result.
+
+
+
