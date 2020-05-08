@@ -7,16 +7,37 @@ class Project extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {username: null, admin: false, page: "stops", search: ""};
-		/* get login status and identify */
-		fetch('http://localhost:8000/username', {
-			method: 'get',
-			mode: 'cors',
-			credentials: 'include',
-		})
-		.then(res => res.json())
-		.then(data => {
-			this.setState({username: data.username, admin: data.admin});
-		});
+		var url = window.location.href;
+		url = url.split('?');
+		if(url[1]=='admin') {
+			// admin log in
+			fetch('http://localhost:8000/adminLogIn', {
+				method: 'get',
+				mode: 'cors',
+				credentials: 'include',
+			})
+			.then(res => res.json())
+			.then(data => {
+				if(data.admin) {
+					this.setState({username: data.username, admin: data.admin});
+					alert("Log in as admin successfully");
+				}
+				else
+					alert("Failed to log in as admin");
+			});
+		}
+		else {
+			/* get login status */
+			fetch('http://localhost:8000/username', {
+				method: 'get',
+				mode: 'cors',
+				credentials: 'include',
+			})
+			.then(res => res.json())
+			.then(data => {
+				this.setState({username: data.username, admin: data.admin});
+			});
+		}
 	}
 	/* test login */
 	login = (e) => {
