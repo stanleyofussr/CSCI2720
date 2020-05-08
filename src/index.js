@@ -66,6 +66,8 @@ class LogInStatus extends React.Component {
 		this.state = {username: null, admin: null};
 		fetch('http://localhost:8000/username', {
 			method: 'get',
+			mode: 'cors',
+			credentials: 'include',
 		})
 		.then(res => res.json())
 		.then(data => {
@@ -73,6 +75,7 @@ class LogInStatus extends React.Component {
 			this.setState({username: data.username, admin: data.admin});
 		});
 	}
+
 	/* test login */
 	login = () => {
 		var details = {
@@ -89,6 +92,8 @@ class LogInStatus extends React.Component {
 
 		fetch('http://localhost:8000/login', {
 			method: 'post',
+			mode: 'cors',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 			},
@@ -97,23 +102,18 @@ class LogInStatus extends React.Component {
 		.then(res => res.json())
 		.then(data => {
 			this.setState({username: data.username});
-			
-		});
-		fetch('http://localhost:8000/username', {
-			method: 'get',
-		})
-		.then(res => res.json())
-		.then(data => {
-			console.log(data);
 		});
 	}
 	logout = () => {
 		fetch('http://localhost:8000/logout', {
-			method: 'post'
+			method: 'post',
+			mode: 'cors',
+			credentials: 'include',
 		})
 		.then(res => res.json())
 		.then(data => {
-			console.log(data);
+			if(data.logout == 1)
+				this.setState({username: null, admin: null});
 		});
 	}
 	render() {

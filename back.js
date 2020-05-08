@@ -9,7 +9,7 @@ var cors = require('cors')
 /* define app to use express */
 var app = express()
 app.use(bodyParser.urlencoded({extended: false}))
-app.use(cors())
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(session({
 	secret: 'csci2720',
 	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
@@ -100,7 +100,7 @@ app.get('/username', (req, res) => {
 	if(req.session.admin != undefined) {
 		res.send({'admin': true});
 	} else if(req.session.username != undefined) {
-		UserModel.findOne({ username: username }, (err, result) => {
+		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result)
