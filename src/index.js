@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import cookie from "react-cookie";
+import $ from  'jquery'
+import "./stopList.js"
+
 class LogIn extends React.Component {
 	constructor(props){
 		super(props);
