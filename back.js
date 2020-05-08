@@ -1,21 +1,22 @@
 /* require modules */
-var mongoose = require('mongoose');
-var express = require('express');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var http = require('http');
+var mongoose = require('mongoose')
+var express = require('express')
+var bodyParser = require('body-parser')
+var session = require('express-session')
+var http = require('http')
+var cors = require('cors')
 
 /* define app to use express */
-var app = express();
-app.use(bodyParser.urlencoded({extended: false}));
-
+var app = express()
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(cors())
 app.use(session({
 	secret: 'csci2720',
 	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
-}));
+}))
 
 /* connect to mongodb */
-var mongodb = "mongodb://localhost:27017/csci2720";
+var mongodb = 'mongodb://localhost:27017/csci2720';
 mongoose.set('useCreateIndex', true);
 mongoose.connect(mongodb, { useNewUrlParser: true });
 var db = mongoose.connection;
@@ -53,9 +54,9 @@ RouteModel = mongoose.model('Route', RouteSchema); // can be ommited
 /* set header */
 app.all('/', (req, res) => {
 	/* set response header */
-	res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE, POST");
-    res.setHeader("Access-Control-Allow-Headers", "*");
+	res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, POST');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 	res.setHeader('Content-Type', 'application/json');
 	next();
 });
@@ -66,15 +67,15 @@ app.post('/signup', (req, res) => {
 	var pwd = req.body.pwd;
 	UserModel.findOne({ username: username }, (err, result) => {
 		if(err)
-			return handleError(err);
+			return console.log(err);
 		if(result)
-			res.send({"signup": 0});
+			res.send({'signup': 0});
 		else {
 			UserModel.create({ username: username, pwd: pwd}, (err, result) => {
 				if(err)
-					return handleError(err);
+					return console.log(err);
 				else
-					res.send({"signup": 1});
+					res.send({'signup': 1});
 			});
 		}
 	});
@@ -85,19 +86,36 @@ app.post('/login', (req, res) => {
 	var pwd = req.body.pwd;
 	UserModel.findOne({ username: username, pwd: pwd }, (err, result) => {
 		if(err)
-			return handleError(err);
+			return console.log(err);
 		if(result) {
 			req.session.username = username;
-			res.send({"login": 1});
+			res.send({'username': username});
 		}
 		else 
-			res.send({"login": 0});
+			res.send({'username': null});
 	});
 });
+/* get username */
+app.get('/username', (req, res) => {
+	if(req.session.admin != undefined) {
+		res.send({'admin': true});
+	} else if(req.session.username != undefined) {
+		UserModel.findOne({ username: username }, (err, result) => {
+			if(err)
+				return console.log(err);
+			if(result)
+				res.send({'username': req.session.username, 'admin': null});
+			else 
+				res.send({'username': null, 'admin': null});
+		});
+	} else {
+		res.send({'username': null, 'admin': null});
+	}
+})
 /* log out */
 app.post('/logout', (req, res) => {
 	req.session.destroy(() => {
-		res.send({"logout": 1});
+		res.send({'logout': 1});
 	});
 });
 /* change password */
@@ -108,7 +126,7 @@ app.put('/changePwd', (req, res) => {
 		var update = { $set: { pwd: req.body.pwd }};
 		UserModel.updateOne(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send({ 'pwdChanged': 1});
 		})
 	} else {
@@ -122,7 +140,7 @@ app.put('/favourite/:stopname', (req, res) => {
 		var update = { $addToSet: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send({ 'stopAdded': 1});
 		});
 	} else {
@@ -134,7 +152,7 @@ app.get('/favourite', (req, res) => {
 	if(req.session.username != undefined) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			res.send(result.favourite);
 		});
 	} else {
@@ -148,7 +166,7 @@ app.delete('/favourite/:stopname', (req, res) => {
 		var update = { $pull: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.nModified != 0)
 				res.send({ 'stopRemoved': 1 });
 			else 
@@ -176,7 +194,7 @@ app.delete('/user/:username', (req, res) => {
 	if(req.session.admin != undefined) {
 		UserModel.remove({ username: req.params.username}, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.deletedCount == 0)
 				res.send({ 'deleted': 0 });
 			else
@@ -192,7 +210,7 @@ app.delete('/stop/:stopname', (req, res) => {
 	if(req.session.admin != undefined) {
 		UserModel.remove({ stopname: req.params.stopname}, (err, result) => {
 			if(err)
-				return handleError(err);
+				return console.log(err);
 			if(result.deletedCount == 0)
 				res.send({ 'deleted': 0 });
 			else
@@ -203,10 +221,35 @@ app.delete('/stop/:stopname', (req, res) => {
 	}
 });
 
+/* admin get all bus stop */
+app.get('/stop', (req, res) => {
+	if(req.session.admin != undefined || req.session.username != undefined) {
+		StopModel.find({}, (err, result) => {
+			if(err)
+				return console.log(err);
+			res.send(result);
+		});
+	} else {
+		res.send({ 'login': 0 });
+	}
+	
+});
+
+/* for test only */
+app.post('/stop', (req, res) => {
+	StopModel.create({stopname: 'test', longtitude: 50, latitude: 30, 
+		arrival: [{route: 'route1', time: '2020-01-01'}, {route: 'route2', time: '2020-01-01'}],
+		comment: [{body: 'hahaha', username: 'user1'}, {body: 'ssss', username: 'user2'}]   }, (err, result) => {
+		if(err)
+			return console.log(err);
+		res.send({'created': 1});
+	});
+});
+
 /* flush stop data */
 
 
-app.listen(8000);
+http.createServer(app).listen(8000);
 
 
 
