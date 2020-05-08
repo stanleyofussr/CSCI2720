@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 const testData = [
     { _objectID: "asdf", stopname: "test1", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
