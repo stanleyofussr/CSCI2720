@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ShowList from "./stopList.js"
+import StopList from "./stopList.js"
 
-class NavigationBar extends React.Component {
+/* upper layer */
+class Project extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: null};
+		this.state = {username: null, admin: null, page: "stop", search: ""};
 		/* get login status and identify */
 		fetch('http://localhost:8000/username', {
 			method: 'get',
@@ -18,7 +19,7 @@ class NavigationBar extends React.Component {
 		});
 	}
 	/* test login */
-	login = () => {
+	login = (e) => {
 		var details = {
 			'username': 'test',
 			'pwd': 'test'
@@ -45,8 +46,9 @@ class NavigationBar extends React.Component {
 			this.setState({username: data.username});
 		});
 	}
+
 	/* test logout */
-	logout = () => {
+	logout = (e) => {
 		fetch('http://localhost:8000/logout', {
 			method: 'post',
 			mode: 'cors',
@@ -59,6 +61,25 @@ class NavigationBar extends React.Component {
 		});
 	}
 
+	handleSearchChange = (e) => {
+		this.setState({search: e.target.value});
+	}
+
+	render() {
+		return (
+			<div>
+				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
+					logout={this.logout} login={this.login}/>
+				<div id="log"></div>
+				<StopList page={this.state.page} search={this.state.search} />
+				<div id="userList"></div>
+				<div id="stopInfo"></div>
+			</div>
+		);
+	}
+}
+
+class NavigationBar extends React.Component {
 	render() {
 		return (
 			<nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "#A8D0E7"}}>
@@ -68,23 +89,25 @@ class NavigationBar extends React.Component {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav mr-auto">
+						{this.props.admin==null&&this.props.username==null ? null:
 						<li className="active" style={{margin: "auto 5px"}}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Stops"}<span className="sr-only">(current)</span></a>
-						</li>
+						</li>}
+						{this.props.admin==null&&this.props.username==null ? null:
 						<li style={{margin: "auto 5px"}}>
-							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Favourite"}</a>
-						</li>
-						<form className="form-inline" style={{margin: "10px"}}>
-	    					<input className="form-control mr-sm-2" type="search" placeholder="Search"/>
-	  					</form>
+							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.props.admin==null?"Favourite":"Users"}</a>
+						</li>}
+						{this.props.admin==null&&this.props.username==null ? null:
+						<form className="form-inline">
+	    					<input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={(e) => this.props.handleSearchChange(e)}/>
+	  					</form>}
 					</ul>
-					<LogInStatus username={this.state.username} admin={this.state.admin} login={this.login} logout={this.logout}/>
+					<LogInStatus username={this.props.username} admin={this.props.admin} login={this.props.login} logout={this.props.logout}/>
 				</div>
 			</nav>
 		);
 	}
 }
-
 
 class LogInStatus extends React.Component {
 	
@@ -161,5 +184,4 @@ class SignUp extends React.Component {
 	}
 }
 
-ReactDOM.render(<NavigationBar/>, document.querySelector("#navigationBar"));
-ReactDOM.render(<ShowList search = "long" page = 'favorite'/>, document.querySelector("#stopList"));
+ReactDOM.render(<Project/>, document.getElementById('project'));
