@@ -6,7 +6,7 @@ import StopList from "./stopList.js"
 class Project extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: null, page: "stop", search: ""};
+		this.state = {username: null, admin: null, page: "stops", search: ""};
 		/* get login status and identify */
 		fetch('http://localhost:8000/username', {
 			method: 'get',
@@ -64,17 +64,23 @@ class Project extends React.Component {
 	handleSearchChange = (e) => {
 		this.setState({search: e.target.value});
 	}
-
+	clickStops = (e) => {
+		this.setState({page: "stops"});
+	}
+	clickFavorUser = (e) => {
+		if(this.state.username != null) {
+			this.setState({page: "favourite"});
+		} else {
+			this.setState({page: "users"});
+		}
+	}
 	render() {
 		return (
 			<div>
 				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
-					logout={this.logout} login={this.login}/>
+					logout={this.logout} login={this.login} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
 				<div id="log"></div>
-				{(this.state.username != null) ? (
-					<StopList page={this.state.page} search={this.state.search} />
-				) : null }
-				
+				{this.state.page!="users" ? <StopList page={this.state.page} search={this.state.search} /> : null }
 				<div id="userList"></div>
 				<div id="stopInfo"></div>
 			</div>
@@ -83,6 +89,16 @@ class Project extends React.Component {
 }
 
 class NavigationBar extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {page: "stops"};
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			page: nextProps.page
+		});
+	}
+
 	render() {
 		return (
 			<nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "#A8D0E7"}}>
@@ -93,11 +109,11 @@ class NavigationBar extends React.Component {
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav mr-auto">
 						{this.props.admin==null&&this.props.username==null ? null:
-						<li className="active" style={{margin: "auto 5px"}}>
+						<li className={this.state.page=="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickStops(e)}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Stops"}<span className="sr-only">(current)</span></a>
 						</li>}
 						{this.props.admin==null&&this.props.username==null ? null:
-						<li style={{margin: "auto 5px"}}>
+						<li className={this.state.page!="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickFavorUser(e)}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.props.admin==null?"Favourite":"Users"}</a>
 						</li>}
 						{this.props.admin==null&&this.props.username==null ? null:

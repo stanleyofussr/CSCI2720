@@ -7,25 +7,38 @@ const testData = [
     { _objectID: "asdf", stopname: "test4", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "asdf", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
 ];
+const favourite = [
+    { _objectID: "asdf", stopname: "test4", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+];
 
 export default class StopList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            //favorite: this.props.favorite,
             stopListData: testData,
-            filteredData: testData
-            //favorite: (this.props.page == 'favorite')
+            filteredData: testData,
+            favourite: favourite,
         };
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            filteredData: testData.filter(item => {
-                if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
-                    return true;
-                return false;
-            }),
-        });
+        if(nextProps.page == "favourite") {
+            this.setState({
+                filteredData: favourite.filter(item => {
+                    if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
+                        return true;
+                    return false;
+                }),
+            });
+        }
+        else {
+            this.setState({
+                filteredData: testData.filter(item => {
+                    if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
+                        return true;
+                    return false;
+                }),
+            });
+        }
     }
 
     render() {
