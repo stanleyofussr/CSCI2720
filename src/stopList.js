@@ -1,4 +1,5 @@
 import React from 'react';
+import StopDetail from './stopDetail.js'
 
 const testData = [
     { _objectID: "asdf", stopname: "test1", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
@@ -49,6 +50,7 @@ export default class StopList extends React.Component {
                         <StopItem stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length} />
                     )}
                 </div>
+                <StopDetail />
             </div>
         )
     }
