@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 const testData = [
     { _objectID: "asdf", stopname: "test1", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "asdf", stopname: "test2", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
@@ -30,7 +30,6 @@ export default class ShowList extends React.Component {
 }
 
 class StopItem extends React.Component {
-
     render() {
         return (
             <div className="stopItem card bg-light">
