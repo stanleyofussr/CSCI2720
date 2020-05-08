@@ -134,4 +134,4 @@ class LogInStatus extends React.Component {
 }
 
 ReactDOM.render(<LogInStatus/>, document.querySelector("#logStatus"));
-ReactDOM.render(<ShowList/>, document.querySelector("#stopList"));
+ReactDOM.render(<ShowList favorite = {false} search = "" />, document.querySelector("#stopList"));

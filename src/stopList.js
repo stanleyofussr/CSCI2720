@@ -12,6 +12,8 @@ export default class ShowList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchInput : this.props.search,
+            favorite: this.props.favorite,
             stopListData: testData,
         };
     }
