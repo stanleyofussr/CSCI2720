@@ -6,7 +6,7 @@ import StopList from "./stopList.js"
 class Project extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: null, page: "stops", search: ""};
+		this.state = {username: null, admin: false, page: "stops", search: ""};
 		/* get login status and identify */
 		fetch('http://localhost:8000/username', {
 			method: 'get',
@@ -43,7 +43,7 @@ class Project extends React.Component {
 		})
 		.then(res => res.json())
 		.then(data => {
-			this.setState({username: data.username});
+			this.setState({username: data.username, admin: data.admin});
 		});
 	}
 
@@ -57,7 +57,7 @@ class Project extends React.Component {
 		.then(res => res.json())
 		.then(data => {
 			if(data.logout == 1)
-				this.setState({username: null, admin: null});
+				this.setState({username: null, admin: false});
 		});
 	}
 
@@ -89,16 +89,6 @@ class Project extends React.Component {
 }
 
 class NavigationBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {page: "stops"};
-	}
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			page: nextProps.page
-		});
-	}
-
 	render() {
 		return (
 			<nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "#A8D0E7"}}>
@@ -108,15 +98,15 @@ class NavigationBar extends React.Component {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav mr-auto">
-						{this.props.admin==null&&this.props.username==null ? null:
-						<li className={this.state.page=="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickStops(e)}>
+						{(!this.props.admin)&&this.props.username==null ? null:
+						<li className={this.props.page=="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickStops(e)}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{"Stops"}<span className="sr-only">(current)</span></a>
 						</li>}
-						{this.props.admin==null&&this.props.username==null ? null:
-						<li className={this.state.page!="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickFavorUser(e)}>
-							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.props.admin==null?"Favourite":"Users"}</a>
+						{(!this.props.admin)&&this.props.username==null ? null:
+						<li className={this.props.page!="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickFavorUser(e)}>
+							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.props.admin?"Users":"Favourite"}</a>
 						</li>}
-						{this.props.admin==null&&this.props.username==null ? null:
+						{(!this.props.admin)&&this.props.username==null ? null:
 						<form className="form-inline">
 	    					<input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={(e) => this.props.handleSearchChange(e)}/>
 	  					</form>}
@@ -131,7 +121,7 @@ class NavigationBar extends React.Component {
 class LogInStatus extends React.Component {
 	
 	render() {
-		if(this.props.admin == null)
+		if(this.props.admin == false)
 			return (
 				<span>
 					{this.props.username == null ? <SignUp/> : <a>{this.props.username}</a>}

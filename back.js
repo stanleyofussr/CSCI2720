@@ -90,10 +90,10 @@ app.post('/login', (req, res) => {
 		if(result) {
 			req.session.username = username;
 			req.session.admin = false;
-			res.send({'username': username});
+			res.send({'username': username, 'admin': false});
 		}
 		else 
-			res.send({'username': null});
+			res.send({'username': null, 'admin': false});
 	});
 });
 /* get username */
