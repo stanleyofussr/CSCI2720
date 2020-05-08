@@ -12,27 +12,26 @@ export default class StopList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchInput : this.props.search,
-            favorite: this.props.favorite,
+            //favorite: this.props.favorite,
             stopListData: testData,
+            filteredData: testData
+            //favorite: (this.props.page == 'favorite')
+        };
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
             filteredData: testData.filter(item => {
-                if (item.stopname.toLowerCase().includes(this.props.search.toLowerCase()))
+                if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
                     return true;
                 return false;
             }),
-            favorite: (this.props.page == 'favorite')
-        };
+        });
     }
-
-    
-
-
 
     render() {
         return (
             <div className="container">
-                <div className="card-columns mt-3 text-center">
-                    
+                <div className="card-columns mt-3 text-center">                    
                     {this.state.filteredData.map(stop =>
                         <StopItem stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length} />
                     )}
