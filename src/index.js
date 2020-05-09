@@ -6,7 +6,7 @@ import StopList from "./stopList.js"
 class Project extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: false, page: null, search: ""};
+		this.state = {username: null, admin: false, page: "stops", search: ""};
 		if(window.location.href=='http://localhost:3000/admin') {
 			// admin log in
 			fetch('http://localhost:8000/adminLogIn', {
@@ -17,7 +17,7 @@ class Project extends React.Component {
 			.then(res => res.json())
 			.then(data => {
 				if(data.admin) {
-					this.setState({username: data.username, admin: data.admin, page: "stops"});
+					this.setState({username: data.username, admin: data.admin});
 					alert("Log in as admin successfully");
 				}
 				else
@@ -33,7 +33,7 @@ class Project extends React.Component {
 			})
 			.then(res => res.json())
 			.then(data => {
-				this.setState({username: data.username, admin: data.admin, page: "stops"});
+				this.setState({username: data.username, admin: data.admin});
 			});
 		}
 	}
@@ -62,7 +62,7 @@ class Project extends React.Component {
 		})
 		.then(res => res.json())
 		.then(data => {
-			this.setState({username: data.username, admin: data.admin, page: "stops"});
+			this.setState({username: data.username, admin: data.admin});
 		});
 	}
 
@@ -76,7 +76,7 @@ class Project extends React.Component {
 		.then(res => res.json())
 		.then(data => {
 			if(data.logout == 1) {
-				this.setState({username: null, admin: false, page: null});
+				this.setState({username: null, admin: false});
 				window.location.href = 'http://localhost:3000';
 			}
 
@@ -102,7 +102,7 @@ class Project extends React.Component {
 				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
 					logout={this.logout} login={this.login} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
 				<div id="log"></div>
-				{this.state.page=="stops"||this.state.page=="favourite" ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} username={this.state.username}/> : null}
+				{(this.state.page=="stops"||this.state.page=="favourite")&&(this.state.username!=null||this.state.admin) ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} username={this.state.username}/> : null}
 				<div id="userList"></div>
 				<div id="stopInfo"></div>
 			</div>
