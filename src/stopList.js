@@ -7,7 +7,11 @@ const testData = [
     { _objectID: "2", stopname: "test2", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "3", stopname: "test3", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "4", stopname: "test4", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
-    { _objectID: "5", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "5", stopname: "test5", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "6", stopname: "test6", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "7", stopname: "test7", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "7", stopname: "test8", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "9", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
 ];
 const favourite = [
     { _objectID: "4", stopname: "test4", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
@@ -79,7 +83,7 @@ export default class StopList extends React.Component {
                     )}
                 </div>
                 {this.state.stopListData.map(stop =>
-                    <StopDetail stopName = {stop.stopname}/>
+                    <StopDetail stopName = {stop.stopname} isAdmin = {true}/>
                 )}
             </div>
         )

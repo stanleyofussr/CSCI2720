@@ -7,7 +7,7 @@ export default class StopDetail extends React.Component {
 				<div className="modal-dialog modal-lg" role="document">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+							<h5 className="modal-title" id="exampleModalLabel">{this.props.stopName}</h5>
 							<button type="button" className="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -16,8 +16,11 @@ export default class StopDetail extends React.Component {
 							{this.props.stopName}
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
 							<button type="button" className="btn btn-primary">Save changes</button>
+							{this.props.isAdmin ? (
+								<button type="button" className="btn btn-danger">delete</button>
+							):null}
+							<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
 						</div>
 					</div>
 				</div>
