@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(session({
 	secret: 'csci2720',
-	// cookie: { maxAge: 1000*60*60 } // expire in 1 hour
+	cookie: { maxAge: 1000*60*60 } // expire in 1 hour
 }))
 
 /* connect to mongodb */
@@ -139,7 +139,7 @@ app.put('/favourite/:stopname', (req, res) => {
 	if(req.session.username != undefined) {
 		var conditions = { username: req.session.username };
 		var update = { $addToSet: { favourite: req.params.stopname }};
-		UserModel.update(conditions, update, (err, result) => {
+		UserModel.updateOne(conditions, update, (err, result) => {
 			if(err)
 				return console.log(err);
 			res.send({ 'stopAdded': 1});

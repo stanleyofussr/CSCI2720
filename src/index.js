@@ -7,9 +7,7 @@ class Project extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {username: null, admin: false, page: "stops", search: ""};
-		var url = window.location.href;
-		url = url.split('?');
-		if(url[1]=='admin') {
+		if(window.location.href=='http://localhost:3000/admin') {
 			// admin log in
 			fetch('http://localhost:8000/adminLogIn', {
 				method: 'get',
@@ -77,8 +75,11 @@ class Project extends React.Component {
 		})
 		.then(res => res.json())
 		.then(data => {
-			if(data.logout == 1)
+			if(data.logout == 1) {
 				this.setState({username: null, admin: false});
+				window.location.href = 'http://localhost:3000';
+			}
+
 		});
 	}
 
@@ -101,7 +102,7 @@ class Project extends React.Component {
 				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
 					logout={this.logout} login={this.login} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
 				<div id="log"></div>
-				{this.state.username!=null ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} /> : null }
+				{(this.state.page=="stops"||this.state.page=="favourite")&&(this.state.username!=null||this.state.admin) ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} username={this.state.username}/> : null}
 				<div id="userList"></div>
 				<div id="stopInfo"></div>
 			</div>
