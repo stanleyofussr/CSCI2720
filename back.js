@@ -211,7 +211,7 @@ app.get('/adminLogIn', (req, res) => {
 //TODO: modify comment model
 app.delete('/user/:username', (req, res) => {
 	if(req.session.admin) {
-		UserModel.remove({ username: req.params.username}, (err, result) => {
+		UserModel.deleteOne({ username: req.params.username}, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
@@ -227,7 +227,7 @@ app.delete('/user/:username', (req, res) => {
 /* admin delete a bus stop */
 app.delete('/stop/:stopid', (req, res) => {
 	if(req.session.admin) {
-		StopModel.remove({ stopid: req.params.stopid }, (err, result) => {
+		StopModel.deleteOne({ stopid: req.params.stopid }, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
@@ -262,12 +262,14 @@ app.post('/comment', (req, res) => {
 /* flush stop data */
 app.post('/flush/stop', (req, res) => {
 	if(req.session.admin) {
-		StopModel.deleteMany({}, (err, result) => {
-			StopModel.create(req.body.data, (err, result) => {
-				if(err)
-					return console.log(err);
-				res.send({ 'flush': true });
-			})
+		ArrivalModel.deleteMany({}, (err, result) => {
+			StopModel.deleteMany({}, (err, result) => {
+				StopModel.create(req.body.stops, (err, result) => {
+					if(err)
+						return console.log(err);
+					res.send({ 'flush': true });
+				})
+			});
 		});
 	} else {
 		res.send({ 'admin': false });
@@ -279,7 +281,7 @@ app.post('/flush/comment', (req, res) => {
 	if(req.session.admin) {
 		CommentModel.find({}, ['stopid'], (err, comments) => {
 			for(var i in comments) {
-				StopModel.update({stopid: comments[i].stopid}, {$addToSet: {comment: comments[i]._id}}, (err, result) => {
+				StopModel.updateOne({stopid: comments[i].stopid}, {$addToSet: {comment: comments[i]._id}}, (err, result) => {
 					if(err)
 						return console.log(err);
 				});
@@ -292,6 +294,21 @@ app.post('/flush/comment', (req, res) => {
 })
 
 /* flush arrival time */
+app.post('/flush/arrival', (req, res) => {
+	if(req.session.admin) {
+		ArrivalModel.create(req.body.arrival, (err, arrivals) => {
+			for(var i in arrivals) {
+				StopModel.updateOne({stopid: arrivals[i].stopid}, {$addToSet: {arrival: arrivals[i]._id}}, (err, result) => {
+					if(err)
+						return console.log(err);
+				})
+			}
+			res.send({ 'flush': true });
+		});
+	} else {
+		res.send({ 'admin': false });
+	}
+})
 
 
 http.createServer(app).listen(8000);
