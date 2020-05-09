@@ -3,7 +3,7 @@ import React from 'react'
 export default class StopDetail extends React.Component {
 	render() {
 		return (
-			<div className="modal fade bd-example-modal-lg" id={"Modal" + this.props.stopName} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div className="modal fade bd-example-modal-lg" id={"Modal" + this.props.stopName} tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div className="modal-dialog modal-lg" role="document">
 					<div className="modal-content">
 						<div className="modal-header">

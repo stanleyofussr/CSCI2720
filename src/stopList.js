@@ -133,7 +133,6 @@ export default class StopList extends React.Component {
                     this.setState({
                         temp: this.state.favourite.push(stopData)
                     })
-                    alert("Location has been added to your favourite.")
                 }
             });
     }
@@ -155,7 +154,6 @@ export default class StopList extends React.Component {
                         temp: this.state.favourite.splice(index0, 1),
                         temp: this.state.filteredData.splice(index1, 1)
                     })
-                    alert("Location has been removed from your favourite.")
                 }
             })
     }
