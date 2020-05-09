@@ -75,8 +75,11 @@ class Project extends React.Component {
 		})
 		.then(res => res.json())
 		.then(data => {
-			if(data.logout == 1)
+			if(data.logout == 1) {
 				this.setState({username: null, admin: false, page: null});
+				window.location.href = 'http://localhost:3000';
+			}
+
 		});
 	}
 
