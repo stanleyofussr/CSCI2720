@@ -48,6 +48,7 @@ export default class StopList extends React.Component {
         }
     }
 
+    //FOR USER, add the location to favourite
     addFavHandler = (name, event) => {
         //TODO Ajax
         var index = testData.findIndex(element => element.stopname == name);
@@ -55,16 +56,22 @@ export default class StopList extends React.Component {
         this.setState({
             temp: favourite.push(stopData)
         })
-        //TODO notice
+        alert("Location has been added to your favourite.")
     }
 
+    //FOR USER, delete the location from favourite
     delFavHandler = (name, event) => {
         //TODO Ajax
         var index = favourite.findIndex(element => element.stopname == name);
         this.setState({
             temp: favourite.splice(index, 1)
         })
-        //TODO notice
+        alert("Location has been removed from your favourite.")
+    }
+
+    //FOR ADMIN, delete the location from database
+    delItemHandler = event => {
+        //TODO Ajax
     }
 
     inFavChecker = (value, item) => {
@@ -76,6 +83,7 @@ export default class StopList extends React.Component {
     render() {
         return (
             <div className="container">
+                
                 <div className="card-columns mt-3 text-center">
                     {this.state.filteredData.map(stop =>
                         <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
@@ -83,7 +91,7 @@ export default class StopList extends React.Component {
                     )}
                 </div>
                 {this.state.stopListData.map(stop =>
-                    <StopDetail stopName = {stop.stopname} isAdmin = {true}/>
+                    <StopDetail stopName={stop.stopname} isAdmin={true} />
                 )}
             </div>
         )
@@ -99,7 +107,7 @@ class StopItem extends React.Component {
                         <div className="col-10 text-left"><h4>{this.props.stopName}</h4></div>
                         <div className="col-2 d-flex justify-content-center align-items-center">
                             {this.props.inFavourite ? (
-                                <svg onClick={(e) => this.props.delFavHandler(this.props.stopName, e)} className="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="#ea0000" xmlns="http://www.w3.org/2000/svg">
+                                <svg data-toggle = "popover" data-content = "Some" onClick={(e) => this.props.delFavHandler(this.props.stopName, e)} className="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="#ea0000" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clipRule="evenodd" />
                                 </svg>) : (
                                     <svg onClick={(e) => this.props.addFavHandler(this.props.stopName, e)} className="bi bi-heart" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
