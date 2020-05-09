@@ -101,7 +101,7 @@ class Project extends React.Component {
 				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
 					logout={this.logout} login={this.login} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
 				<div id="log"></div>
-				{this.state.username!=null ? <StopList page={this.state.page} search={this.state.search} /> : null }
+				{this.state.username!=null ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} /> : null }
 				<div id="userList"></div>
 				<div id="stopInfo"></div>
 			</div>
