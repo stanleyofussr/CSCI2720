@@ -99,29 +99,57 @@ __Request__
 * Line: POST /flush/stop
 * Body: 
 ```Js
-data: [
-    {
-        "stopid": "xxxx",
-        "stopname": "xxxx",
-        "longtitude": 123,
-        "latitude": 123,
-    },
-    ...,
-    ...,
-]
+{
+	"stops": [
+	    {
+	        "stopid": "xxxx",
+	        "stopname": "xxxx",
+	        "longtitude": 123,
+	        "latitude": 123,
+	    },
+	    ...,
+	    ...,
+	]
+}
 ```
-
 __Response__
 * ``` { "flush": true } ```
 * ``` { "admin": false } ```
 
-## Reload comment to each stop
+## Reload comment for each stop
 __Request__
 * Line: POST /flush/comment
 
 __Response__
 * ``` { "flush": true } ```
 * ``` { "admin": false } ```
+
+## Reload arrival time for each stop
+__Request__
+* Line: POST /flush/arrival
+* Body:
+```Js
+{
+	"arrival": 
+	[
+		{
+			"stopid": "xxxx",
+			"route": "xxxx",
+			"dir": "x",
+			"co": "xxx",
+			"seq": 1, // 第几站
+			"time": [time1, time2, time3], // date format 未来三个arrival time
+			"dest": "xxxx" // stop name
+		},
+		...,
+		...,
+	]
+}
+```
+
+__Response__
+
+
 
 ## Test API
 __Request__
