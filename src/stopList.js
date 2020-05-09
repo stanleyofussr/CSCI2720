@@ -10,7 +10,7 @@ const testData = [
     { _objectID: "5", stopname: "test5", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "6", stopname: "test6", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "7", stopname: "test7", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
-    { _objectID: "7", stopname: "test8", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
+    { _objectID: "8", stopname: "test8", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
     { _objectID: "9", stopname: "longlonglonglonglonglonglongTESTlonglonglong", longtitude: 123.21, latitude: 32.123, arrival: [12.32, 13.32], comment: ['test', 'test2'] },
 ];
 const favourite = [
@@ -25,6 +25,8 @@ export default class StopList extends React.Component {
             filteredData: testData,
             favourite: favourite,
             temp: null,
+            page: "stoplist",
+            username : this.props.username,
         };
     }
     componentWillReceiveProps(nextProps) {
@@ -106,9 +108,12 @@ export default class StopList extends React.Component {
     //FOR USER, delete the location from favourite
     delFavHandler = (name, event) => {
         //TODO Ajax
-        var index = favourite.findIndex(element => element.stopname == name);
+        var index0 = favourite.findIndex(element => element.stopname == name);
+        var index1 = this.state.filteredData.findIndex(element => element.stopname == name)
+        
         this.setState({
-            temp: favourite.splice(index, 1)
+            temp: favourite.splice(index0, 1),
+            temp: this.state.filteredData.splice(index1 ,1)
         })
         alert("Location has been removed from your favourite.")
     }
@@ -127,7 +132,6 @@ export default class StopList extends React.Component {
     render() {
         return (
             <div className="container">
-
                 <div className="card-columns mt-3 text-center">
                     {this.state.filteredData.map(stop =>
                         <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
@@ -180,3 +184,6 @@ class StopItem extends React.Component {
     }
 }
 
+class SortSelector extends React.Component {
+
+}
