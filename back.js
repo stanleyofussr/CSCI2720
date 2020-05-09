@@ -146,7 +146,7 @@ app.put('/changePwd', (req, res) => {
 			res.send({ 'pwdChanged': true});
 		})
 	} else {
-		res.send({ 'login': false });
+		res.send({ 'username': null });
 	}
 })
 /* add a favourite stop */

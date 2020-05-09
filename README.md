@@ -3,27 +3,27 @@
 ## Sign up
 __Request__
 * Line: POST /signup
-* Body: {"username": xxx, "pwd": xxx}
+* Body: ``` {"username": xxx, "pwd": xxx} ```
 
 __Response__
-* {"signup": 0}
-* {"signup": 1}
+* ``` {"signup": false} ``` (sign up fail)
+* ``` {"signup": true} ``` (sign up success)
 
 ## Log in as a user
 __Request__
 * Line: POST /login
-* Body: {"username": xxx, "pwd": xxx}
+* Body: ``` {"username": xxx, "pwd": xxx} ```
 
 __Response__
-* {"username": null, "admin": false}
-* {"username": "xxxxx", "admin": false}
+* ``` {"username": null, "admin": false} ```
+* ``` {"username": "xxxxx", "admin": false} ```
 
 ## Log out as a user or an admin
 __Request__
 * Line: POST /logout
 
 __Response__
-* {"logout": 1}
+* ``` {"username": null, "admin": false} ```
 
 ## Change password
 __Request__
@@ -31,94 +31,104 @@ __Request__
 * Body: {"pwd": xxx}
 
 __Response__
-* {"login": 0} (which means the user haven't logged in)
-* {"pwdChanged": 1}
+* ``` {"username": null} ``` (which means the user haven"t logged in)
+* ``` {"pwdChanged": true} ```
 
-## Add a stop to one's favourite
+## Add a stop to one"s favourite
 __Request__
 * Line: PUT /favourite/:stopname
 
 __Response__
-* {"login": 0}
-* {"stopAdded": 1}
+* ``` {"username": null} ```
+* ``` {"stopAdded": true} ```
+* ``` {"stopAdded": false} ```
 
-## Get one's favourite stop list
+## Get one"s favourite stop list
 __Request__
 * Line: GET /favourite
 
 __Response__
-* {"login": 0}
-* (favourite list): [ "stopname1", "stopname2", ....]
+* ``` {"username": null} ```
+* ``` [ "stopname1", "stopname2", ....] ``` (favourite list)
 
-## Remove a stop from one's favourite list
+## Remove a stop from one"s favourite list
 __Request__
 * Line: DELETE /favourite/:stopname
 
 __Response__
-* {"login": 0}
-* {'stopRemoved': 1} (remove successfully)
-* {'inFavourite': 0} (unable to remove it because it's not in one's favourite)
+* ``` {"username": null} ```
+* ``` {"stopRemoved": true} ``` (remove successfully)
+* ``` {"inFavourite": false} ``` (unable to remove it because it"s not in one"s favourite)
 
 ## Log in as an admin
 __Request__
 * Line: POST /adminLogIn
 
 __Response__
-* {"login": 1}
+* ``` {"username": null, "admin": true} ```
 
 ## Delete a user
 __Request__
 * Line: DELETE /user/:username
 
 __Response__
-* {'admin': false} (you are not an admin)
-* {'deleted': true} (remove successfully)
-* {'deleted': false} (unable to delete it because it's not in db)
+* ``` {"admin": false} ``` (you are not an admin)
+* ``` {"deleted": true} ``` (remove successfully)
+* ``` {"deleted": false} ``` (unable to delete it because it"s not in db)
 
 ## Delete a bus stop
 __Request__
-* Line: DELETE /stop/:stopname
+* Line: DELETE /stop/:stopId
 
 __Response__
-* {'admin': false} (you are not an admin)
-* {'deleted': true} (remove successfully)
-* {'deleted': false} (unable to delete it because it's not in db)
+* ``` {"admin": false} ``` (you are not an admin)
+* ``` {"deleted": true} ``` (remove successfully)
+* ``` {"deleted": false} ``` (unable to delete it because it"s not in db)
 
 ## Get all bus stops
 __Request__
 * Line: GET /stop
 
 __Response__
-* {'login': 0}
+* ``` {"admin": false, "username": null} ```
 * stop list, same as format in db
 
 
-## Flush stop
+## Flush stops
 __Request__
 * Line: POST /flush/stop
 * Body: 
+```Js
 data: [
     {
-        'stopid': 'xxxx',
-        'stopname': 'xxxx',
-        'longtitude': 123,
-        'latitude': 123,
+        "stopid": "xxxx",
+        "stopname": "xxxx",
+        "longtitude": 123,
+        "latitude": 123,
     },
     ...,
     ...,
 ]
+```
 
 __Response__
-* { 'flush': true }
-* { 'admin': false}
+* ``` { "flush": true } ```
+* ``` { "admin": false } ```
 
 ## Reload comment to each stop
 __Request__
 * Line: POST /flush/comment
 
 __Response__
-* { 'flush': true }
-* { 'admin': false}
+* ``` { "flush": true } ```
+* ``` { "admin": false } ```
+
+## Test API
+__Request__
+* Line: POST /comment
+
+__Response__
+* ``` { "comment": true} ```
 
 
 
