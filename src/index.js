@@ -75,11 +75,42 @@ class Project extends React.Component {
 		})
 		.then(res => res.json())
 		.then(data => {
-			if(data.logout == 1) {
+			if(data.username == null && !data.admin) {
 				this.setState({username: null, admin: false});
 				window.location.href = 'http://localhost:3000';
 			}
 
+		});
+	}
+	/* test signup */
+	signup = (e) => {
+		var details = {
+			'username': 'test',
+			'pwd': 'test'
+		};
+		var formBody = [];
+		for (var property in details) {
+			var encodedKey = encodeURIComponent(property);
+			var encodedValue = encodeURIComponent(details[property]);
+			formBody.push(encodedKey + "=" + encodedValue);
+		}
+		formBody = formBody.join("&");
+
+		fetch('http://localhost:8000/signup', {
+			method: 'post',
+			mode: 'cors',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+			},
+			body: formBody
+		})
+		.then(res => res.json())
+		.then(data => {
+			if(data.signup)
+				alert("Sign up successfully.");
+			else
+				alert("Username existed.");
 		});
 	}
 
@@ -100,7 +131,7 @@ class Project extends React.Component {
 		return (
 			<div>
 				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
-					logout={this.logout} login={this.login} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
+					logout={this.logout} login={this.login} signup={this.signup} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
 				<div id="log"></div>
 				{(this.state.page=="stops"||this.state.page=="favourite")&&(this.state.username!=null||this.state.admin) ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} username={this.state.username}/> : null}
 				<div id="userList"></div>
@@ -133,7 +164,7 @@ class NavigationBar extends React.Component {
 	    					<input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={(e) => this.props.handleSearchChange(e)}/>
 	  					</form>}
 					</ul>
-					<LogInStatus username={this.props.username} admin={this.props.admin} login={this.props.login} logout={this.props.logout}/>
+					<LogInStatus username={this.props.username} admin={this.props.admin} login={this.props.login} logout={this.props.logout} signup={this.props.signup}/>
 				</div>
 			</nav>
 		);
@@ -146,7 +177,7 @@ class LogInStatus extends React.Component {
 		if(this.props.admin == false)
 			return (
 				<span>
-					{this.props.username == null ? <SignUp/> : <a>{this.props.username}</a>}
+					{this.props.username == null ? <SignUp signup={this.props.signup}/> : <a>{this.props.username}</a>}
 					{this.props.username == null ? <LogIn login={this.props.login}/> : <LogOut logout={this.props.logout}/>}
 				</span>
 			);
@@ -205,7 +236,7 @@ class SignUp extends React.Component {
 	leave = e => {this.setState({hover: false});}
 	render() {
 		return (
-			<span className="logIcon" onMouseEnter={(e) => this.enter(e)} onMouseLeave={(e) => this.leave(e)}>
+			<span className="logIcon" onMouseEnter={(e) => this.enter(e)} onMouseLeave={(e) => this.leave(e)} onClick={(e) => this.props.signup(e)}>
 				<svg focusable="false" viewBox="0 0 640 512" width="28px">
 					<title>{"Sign Up"}</title>
 					<path fill={this.state.hover?"#656B6F":"black"} d="M624 208h-64v-64c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v64h-64c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h64v64c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-64h64c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm-400 48c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
