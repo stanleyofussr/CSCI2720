@@ -211,7 +211,7 @@ app.get('/adminLogIn', (req, res) => {
 //TODO: modify comment model
 app.delete('/user/:username', (req, res) => {
 	if(req.session.admin) {
-		UserModel.remove({ username: req.params.username}, (err, result) => {
+		UserModel.deleteOne({ username: req.params.username}, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
@@ -227,7 +227,7 @@ app.delete('/user/:username', (req, res) => {
 /* admin delete a bus stop */
 app.delete('/stop/:stopid', (req, res) => {
 	if(req.session.admin) {
-		StopModel.remove({ stopid: req.params.stopid }, (err, result) => {
+		StopModel.deleteOne({ stopid: req.params.stopid }, (err, result) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
