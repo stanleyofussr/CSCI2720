@@ -92,27 +92,9 @@ __Response__
 * {'login': 0}
 * stop list, same as format in db
 
-Note: You can use the test API "POST /stop/test" to add a default stop to db and then use "GET /stop" to see the return result.
 
-
-## Flush bus stop data
+## Flush data
 __Request__
 * Line: POST /stop
 * Body: 
-[
-{
-    'stopname': xxx, 
-    'longtitude': xxx,
-    'latitude': xxx, 
-    'arrival': [{'route': xxx, 'time': xxxx}, {'route': xxx, 'time': xxxx}],
-},
-{
-    'stopname': xxx, 
-    'longtitude': xxx,
-    'latitude': xxx, 
-    'arrival': [{'route': xxx, 'time': xxxx}, {'route': xxx, 'time': xxxx}],
-},
-...
-]
-
 
