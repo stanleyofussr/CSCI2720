@@ -22,3 +22,7 @@
 		column-count: 1;
 	}
 }
+
+.card-columns{
+	max-width: 720px;
+}
