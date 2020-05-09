@@ -93,8 +93,25 @@ __Response__
 * stop list, same as format in db
 
 
-## Flush data
+## Flush stop
 __Request__
-* Line: POST /stop
+* Line: POST /flush/stop
 * Body: 
+data: [
+    {
+        'stopid': 'xxxx',
+        'stopname': 'xxxx',
+        'longtitude': 'xxxx',
+        'latitude': 'xxxx',
+    },
+    ...,
+    ...,
+]
+
+__Response__
+* { 'flush': true }
+* { 'admin': false}
+
+## Reload comment to each stop
+
 

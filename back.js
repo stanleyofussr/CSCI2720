@@ -8,11 +8,11 @@ var cors = require('cors')
 
 /* define app to use express */
 var app = express()
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}), bodyParser.json())
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(session({
 	secret: 'csci2720',
-	cookie: { maxAge: 1000*60*60 } // expire in 1 hour
+	cookie: { maxAge: 1000*60*60 }
 }))
 
 /* connect to mongodb */
@@ -38,8 +38,8 @@ var StopSchema = Schema({
 	stopname: { type: String, require: true }, 
 	longtitude: { type: Number, require: true },
 	latitude: { type: Number, require: true },
-	arrival: [{ type: mongoose.Schema.Types.ObjectId, ref: 'arrivals'}]
-	comment: [{ body: String, username: String, date: Date }]
+	arrival: [{ type: mongoose.Schema.Types.ObjectId, ref: 'arrivals'}],
+	comment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comments'}]
 });
 var ArrivalSchema = Schema({
 	stopid: { type: String, require: true },
@@ -50,12 +50,18 @@ var ArrivalSchema = Schema({
 	time: [{ type: Date }],
 	dest: { type: String, require: true }
 })
-
+var CommentSchema = Schema({
+	username: { type: String, require: true },
+	stopid: { type: String, require: true},
+	content: { type: String, request: true},
+	time: { type: Date, request: true}
+})
 
 /* define model */
 UserModel = mongoose.model('User', UserSchema);
 StopModel = mongoose.model('Stop', StopSchema);
 ArrivalModel = mongoose.model('Arrival', ArrivalSchema);
+CommentModel = mongoose.model('Comment', CommentSchema);
 
 /****** receive http request ******/
 /* set header */
@@ -202,6 +208,7 @@ app.get('/adminLogIn', (req, res) => {
 /* same as user */
 
 /* admin delete a user */
+//TODO: modify comment model
 app.delete('/user/:username', (req, res) => {
 	if(req.session.admin) {
 		UserModel.remove({ username: req.params.username}, (err, result) => {
@@ -245,12 +252,35 @@ app.get('/stop', (req, res) => {
 		res.send({ 'admin': false, 'username': null });
 	}
 });
-
-/* flush stop data */
-app.post('/stop', (req, res) => {
-	
+/* add a comment */ /* test only now */
+app.post('/comment', (req, res) => {
+	CommentModel.create({username: "wanru", stopid: "000001", content: "test comment", time: "2020-01-01"});
+	res.send({'comment': true});
 })
 
+/* flush stop data */
+app.post('/flush/stop', (req, res) => {
+	if(req.session.admin) {
+		StopModel.deleteMany({}, (err, result) => {
+			StopModel.create(req.body.data, (err, result) => {
+				if(err)
+					return console.log(err);
+				res.send({ 'flush': true });
+			})
+		});
+	} else {
+		res.send({ 'admin': false});
+	}
+})
+
+/* reload comment */
+app.post('/flush/comment', (req, res) => {
+	if(req.session.admin) {
+		
+	} else {
+		res.send({ 'admin': false });
+	}
+})
 
 http.createServer(app).listen(8000);
 
