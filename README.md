@@ -101,8 +101,8 @@ data: [
     {
         'stopid': 'xxxx',
         'stopname': 'xxxx',
-        'longtitude': 'xxxx',
-        'latitude': 'xxxx',
+        'longtitude': 123,
+        'latitude': 123,
     },
     ...,
     ...,
@@ -113,5 +113,12 @@ __Response__
 * { 'admin': false}
 
 ## Reload comment to each stop
+__Request__
+* Line: POST /flush/stop
+
+__Response__
+* { 'flush': true }
+* { 'admin': false}
+
 
 

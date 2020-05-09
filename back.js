@@ -254,7 +254,8 @@ app.get('/stop', (req, res) => {
 });
 /* add a comment */ /* test only now */
 app.post('/comment', (req, res) => {
-	CommentModel.create({username: "wanru", stopid: "000001", content: "test comment", time: "2020-01-01"});
+	CommentModel.create({username: "wanru", stopid: "000001", content: "test comment1", time: "2020-01-01"});
+	CommentModel.create({username: "wanru", stopid: "000002", content: "test comment2", time: "2020-01-01"});
 	res.send({'comment': true});
 })
 
@@ -269,18 +270,29 @@ app.post('/flush/stop', (req, res) => {
 			})
 		});
 	} else {
-		res.send({ 'admin': false});
+		res.send({ 'admin': false });
 	}
 })
 
 /* reload comment */
 app.post('/flush/comment', (req, res) => {
 	if(req.session.admin) {
-		
+		CommentModel.find({}, ['stopid'], (err, comments) => {
+			for(var i in comments) {
+				StopModel.update({stopid: comments[i].stopid}, {$addToSet: {comment: comments[i]._id}}, (err, result) => {
+					if(err)
+						return console.log(err);
+				});
+			}
+			res.send({ 'flush': true });
+		})
 	} else {
 		res.send({ 'admin': false });
 	}
 })
+
+/* flush arrival time */
+
 
 http.createServer(app).listen(8000);
 
