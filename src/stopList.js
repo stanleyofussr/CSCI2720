@@ -18,7 +18,7 @@ export default class StopList extends React.Component {
 
         var stopList;
         var favouriteList;
-        
+
 
         fetch('http://localhost:8000/stop/', {
             method: 'get',
@@ -194,8 +194,8 @@ class StopItem extends React.Component {
             <div className="stopItem card bg-light">
                 <div className="card-header">
                     <div className="row">
-                        <div className="col-10 text-left"><h4>{this.props.stopName}</h4></div>
-                        <div className="col-2 d-flex justify-content-center align-items-center">
+                        <div className="col-12 "><h4>{this.props.stopName}
+                        <span className="float-right">
                             {this.props.inFavourite ? (
                                 <svg data-toggle="popover" data-content="Some" onClick={(e) => this.props.delFavHandler(this.props.stopName, e)} className="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="#ea0000" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clipRule="evenodd" />
@@ -205,15 +205,23 @@ class StopItem extends React.Component {
                                     </svg>
                                 )
                             }
+                        </span>
+                        </h4>
                         </div>
                     </div>
                 </div>
                 <div className="card-body">
-                    <h5 className="card-title">Location longtitude:</h5>
-                    <p className="card-text">{this.props.longtitude}</p>
-                    <h5 className="card-title">Location latitude:</h5>
-                    <p className="card-text">{this.props.latitude}</p>
-                    <div className="text-center">
+                    <div className="row">
+                        <div className="col-6">
+                            <h5 className="card-title">Location longtitude:</h5>
+                            <p className="card-text">{this.props.longtitude}</p>
+                        </div>
+                        <div className="col-6">
+                            <h5 className="card-title">Location latitude:</h5>
+                            <p className="card-text">{this.props.latitude}</p>
+                        </div>
+                    </div>
+                    <div className="text-center mt-1">
                         <small className="text-muted"><p className="card-text">Comment number: {this.props.commentNum}</p></small>
                     </div>
                 </div>
