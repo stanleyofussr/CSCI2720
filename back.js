@@ -98,7 +98,7 @@ app.post('/login', (req, res) => {
 });
 /* get username */
 app.get('/username', (req, res) => {
-	if(req.session.admin == true) {
+	if(req.session.admin) {
 		res.send({'username': null, 'admin': true});
 	} else if(req.session.username != undefined && req.session.username != null) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
@@ -136,7 +136,7 @@ app.put('/changePwd', (req, res) => {
 })
 /* add a favourite stop */
 app.put('/favourite/:stopname', (req, res) => {
-	if(req.session.username != undefined) {
+	if(req.session.username != undefined && req.session.username != null) {
 		var conditions = { username: req.session.username };
 		var update = { $addToSet: { favourite: req.params.stopname }};
 		UserModel.updateOne(conditions, update, (err, result) => {
@@ -150,7 +150,7 @@ app.put('/favourite/:stopname', (req, res) => {
 });
 /* get one's favourite list */
 app.get('/favourite', (req, res) => {
-	if(req.session.username != undefined) {
+	if(req.session.username != undefined && req.session.username != null) {
 		UserModel.findOne({ username: req.session.username }, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -162,7 +162,7 @@ app.get('/favourite', (req, res) => {
 });
 /* remove a stopname from one's favourite list*/
 app.delete('/favourite/:stopname', (req, res) => {
-	if(req.session.username != undefined) {
+	if(req.session.username != undefined && req.session.username != null) {
 		var conditions = { username: req.session.username };
 		var update = { $pull: { favourite: req.params.stopname }};
 		UserModel.update(conditions, update, (err, result) => {
@@ -191,7 +191,7 @@ app.get('/adminLogIn', (req, res) => {
 
 /* admin delete a user */
 app.delete('/user/:username', (req, res) => {
-	if(req.session.admin == true) {
+	if(req.session.admin) {
 		UserModel.remove({ username: req.params.username}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -207,7 +207,7 @@ app.delete('/user/:username', (req, res) => {
 
 /* admin delete a bus stop */
 app.delete('/stop/:stopname', (req, res) => {
-	if(req.session.admin == true) {
+	if(req.session.admin) {
 		UserModel.remove({ stopname: req.params.stopname}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -223,7 +223,7 @@ app.delete('/stop/:stopname', (req, res) => {
 
 /* get all bus stop */
 app.get('/stop', (req, res) => {
-	if(req.session.admin == true || (req.session.username != null && req.session.username != undefined)) {
+	if(req.session.admin || (req.session.username != null && req.session.username != undefined)) {
 		StopModel.find({}, (err, result) => {
 			if(err)
 				return console.log(err);
@@ -235,7 +235,7 @@ app.get('/stop', (req, res) => {
 });
 
 /* for test only */
-app.post('/stop', (req, res) => {
+app.post('/stop/test', (req, res) => {
 	StopModel.create({stopname: 'test', longtitude: 50, latitude: 30, 
 		arrival: [{route: 'route1', time: '2020-01-01'}, {route: 'route2', time: '2020-01-01'}],
 		comment: [{body: 'hahaha', username: 'user1'}, {body: 'ssss', username: 'user2'}]   }, (err, result) => {
@@ -246,6 +246,12 @@ app.post('/stop', (req, res) => {
 });
 
 /* flush stop data */
+app.post('/stop', (req, res) => {
+	if(req.session.admin) {
+		StopModel.
+	} else
+		res.send({'admin': false});
+})
 
 
 http.createServer(app).listen(8000);
