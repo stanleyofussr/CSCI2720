@@ -7,9 +7,7 @@ class Project extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {username: null, admin: false, page: "stops", search: ""};
-		var url = window.location.href;
-		url = url.split('?');
-		if(url[1]=='admin') {
+		if(window.location.href=='http://localhost:3000/admin') {
 			// admin log in
 			fetch('http://localhost:8000/adminLogIn', {
 				method: 'get',
