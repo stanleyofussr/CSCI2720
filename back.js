@@ -196,12 +196,12 @@ app.delete('/user/:username', (req, res) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
-				res.send({ 'deleted': 0 });
+				res.send({ 'deleted': false });
 			else
-				res.send({ 'deleted': 1 });
+				res.send({ 'deleted': true });
 		})
 	} else {
-		res.send({ 'authority': 0 });
+		res.send({ 'admin': false });
 	}
 });
 
@@ -212,12 +212,12 @@ app.delete('/stop/:stopname', (req, res) => {
 			if(err)
 				return console.log(err);
 			if(result.deletedCount == 0)
-				res.send({ 'deleted': 0 });
+				res.send({ 'deleted': false });
 			else
-				res.send({ 'deleted': 1 });
+				res.send({ 'deleted': true });
 		})
 	} else {
-		res.send({ 'authority': 0 });
+		res.send({ 'admin': false });
 	}
 });
 

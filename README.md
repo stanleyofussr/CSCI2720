@@ -71,18 +71,18 @@ __Request__
 * Line: DELETE /user/:username
 
 __Response__
-* {'authority': 0} (you are not an admin)
-* {'deleted': 1} (remove successfully)
-* {'deleted': 0} (unable to delete it because it's not in db)
+* {'admin': false} (you are not an admin)
+* {'deleted': true} (remove successfully)
+* {'deleted': false} (unable to delete it because it's not in db)
 
 ## Delete a bus stop
 __Request__
 * Line: DELETE /stop/:stopname
 
 __Response__
-* {'authority': 0} (you are not an admin)
-* {'deleted': 1} (remove successfully)
-* {'deleted': 0} (unable to delete it because it's not in db)
+* {'admin': false} (you are not an admin)
+* {'deleted': true} (remove successfully)
+* {'deleted': false} (unable to delete it because it's not in db)
 
 ## Get all bus stops
 __Request__
