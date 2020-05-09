@@ -6,7 +6,7 @@ import StopList from "./stopList.js"
 class Project extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {username: null, admin: false, page: "stops", search: ""};
+		this.state = {username: null, admin: false, page: "stops"};
 		if(window.location.href=='http://localhost:3000/admin') {
 			// admin log in
 			fetch('http://localhost:8000/adminLogIn', {
@@ -114,9 +114,6 @@ class Project extends React.Component {
 		});
 	}
 
-	handleSearchChange = (e) => {
-		this.setState({search: e.target.value});
-	}
 	clickStops = (e) => {
 		this.setState({page: "stops"});
 	}
@@ -127,13 +124,14 @@ class Project extends React.Component {
 			this.setState({page: "users"});
 		}
 	}
+
 	render() {
 		return (
 			<div>
-				<NavigationBar username={this.state.username} admin={this.state.admin} handleSearchChange={this.handleSearchChange}
-					logout={this.logout} login={this.login} signup={this.signup} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page}/>
+				<NavigationBar username={this.state.username} admin={this.state.admin}
+					logout={this.logout} login={this.login} signup={this.signup} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page} />
 				<div id="log"></div>
-				{(this.state.page=="stops"||this.state.page=="favourite")&&(this.state.username!=null||this.state.admin) ? <StopList searchType = "stopname" page={this.state.page} search={this.state.search} username={this.state.username}/> : null}
+				{(this.state.page=="stops"||this.state.page=="favourite")&&(this.state.username!=null||this.state.admin) ? <StopList page={this.state.page} username={this.state.username}/> : null}
 				<div id="userList"></div>
 				<div id="stopInfo"></div>
 			</div>
@@ -159,10 +157,6 @@ class NavigationBar extends React.Component {
 						<li className={this.props.page!="stops"?"active": ""} style={{margin: "auto 5px"}} onClick={(e) => this.props.clickFavorUser(e)}>
 							<a className="nav-link" href="#" style={{fontSize: "18px"}}>{this.props.admin?"Users":"Favourite"}</a>
 						</li>}
-						{(!this.props.admin)&&this.props.username==null ? null:
-						<form className="form-inline">
-	    					<input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={(e) => this.props.handleSearchChange(e)}/>
-	  					</form>}
 					</ul>
 					<LogInStatus username={this.props.username} admin={this.props.admin} login={this.props.login} logout={this.props.logout} signup={this.props.signup}/>
 				</div>
