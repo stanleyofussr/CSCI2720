@@ -114,7 +114,7 @@ __Response__
 
 ## Reload comment to each stop
 __Request__
-* Line: POST /flush/stop
+* Line: POST /flush/comment
 
 __Response__
 * { 'flush': true }
