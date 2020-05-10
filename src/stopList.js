@@ -237,7 +237,7 @@ export default class StopList extends React.Component {
                         )}
                     </div>
                 </div>
-                <StopDetail latitude={22.283948002091} longtitude={114.15630946053}/>
+                <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"}/>
                 <button className="button btn btn-primary" onClick={(e) => this.sorting("longtitude", "up", e)}>click</button>
             </div >
         )
