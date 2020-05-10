@@ -196,59 +196,58 @@ export default class StopList extends React.Component {
         return false;
     }
     changeOrder = (e) => {
-        if(this.state.order=="up")
-            this.setState({order: "down"});
+        if (this.state.order == "up")
+            this.setState({ order: "down" });
         else
-            this.setState({order: "up"});
+            this.setState({ order: "up" });
     }
     fieldToDistance = (e) => {
-        this.setState({field: "dist"});
+        this.setState({ field: "dist" });
     }
     fieldToName = (e) => {
-        this.setState({field: "name"});
+        this.setState({ field: "name" });
     }
     fieldToRoute = (e) => {
-        this.setState({field: "route"});
+        this.setState({ field: "route" });
     }
     searchTypeToName = (e) => {
-        this.setState({searchType: "name"});
+        this.setState({ searchType: "name" });
     }
     searchTypeToRoute = (e) => {
-        this.setState({searchType: "route"});
+        this.setState({ searchType: "route" });
     }
     handleSearchContent = (e) => {
-        this.setState({searchContent: e.target.value});
+        this.setState({ searchContent: e.target.value });
     }
     showDetails = (e) => {
-        this.setState({detail: true});
+        this.setState({ detail: true });
     }
     render() {
         return (
             <div className="container mt-3">
-                {this.state.detail ? 
-                <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"}/> : 
-                <div>
-                    <div className="row d-flex align-items-center">
-                        <div className="col-2"></div>
-                        <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent}/>
-                    </div>
-                    <div className="row">
-                        <div className="col-6"></div>
-                        <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance}/>
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <div className="card-columns mt-3 text-center">
-                            {this.state.filteredData.map(stop =>
-                                <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
-                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.showDetails}/>
-                            )}
+                {this.state.detail ?
+                    <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"} /> :
+                    <div>
+                        <div className="row d-flex align-items-center">
+                            <div className="col-2"></div>
+                            <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent} />
+                        </div>
+                        <div className="row">
+                            <div className="col-6"></div>
+                            <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance} />
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <div className="card-columns mt-3 text-center">
+                                {this.state.filteredData.map(stop =>
+                                    <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
+                                        addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.showDetails} />
+                                )}
+                            </div>
                         </div>
                     </div>
-                    <button className="button btn btn-primary" onClick={(e) => this.sorting("longtitude", "up", e)}>click</button>
-                </div>
                 }
-                
-                
+
+
             </div>
         )
     }
@@ -298,13 +297,13 @@ class SearchBar extends React.Component {
         return (
             <div className="input-group col-8">
                 <div className="dropdown">
-                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.props.searchType=="name"?"Name": "Route"}</button>
+                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.props.searchType == "name" ? "Name" : "Route"}</button>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <button className="dropdown-item" onClick={(e) => this.props.searchTypeToName(e)}>Name</button>
                         <button className="dropdown-item" onClick={(e) => this.props.searchTypeToRoute(e)}>Route</button>
                     </div>
                 </div>
-                <input type="text" className="form-control" placeholder="Search" onChange={(e) => this.props.handleSearchContent(e)}/>
+                <input type="text" className="form-control" placeholder="Search" onChange={(e) => this.props.handleSearchContent(e)} />
             </div>
         )
     }
@@ -327,7 +326,7 @@ class SortBar extends React.Component {
                     </div>
                     <button className="btn btn-outline-secondary ml-1 float-center" onClick={(e) => this.props.changeOrder(e)}>
                         <svg viewBox="0 0 512 512" width="24px">
-                            {this.props.order=="down" ?
+                            {this.props.order == "down" ?
                                 <path fill="currentColor" d="M240 96h64a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16h-64a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm0 128h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm256 192H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h256a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm-256-64h192a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zM16 160h48v304a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V160h48c14.21 0 21.39-17.24 11.31-27.31l-80-96a16 16 0 0 0-22.62 0l-80 96C-5.35 142.74 1.78 160 16 160z"></path>
                                 :
                                 <path fill="currentColor" d="M240 96h64a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16h-64a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm0 128h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm256 192H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h256a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm-256-64h192a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm-64 0h-48V48a16 16 0 0 0-16-16H80a16 16 0 0 0-16 16v304H16c-14.19 0-21.37 17.24-11.29 27.31l80 96a16 16 0 0 0 22.62 0l80-96C197.35 369.26 190.22 352 176 352z"></path>
