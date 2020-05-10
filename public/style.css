@@ -1,4 +1,13 @@
+/* navigation bar */
+.logIcon {
+	margin: 10px;
+}
 
+.logIcon:hover {
+	cursor: pointer;
+}
+
+/* stop list */
 @media (min-width: 576px) and (max-width: 767px) {
 	.card-columns {
 		column-count: 1;
