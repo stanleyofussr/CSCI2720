@@ -153,7 +153,7 @@ __Response__
 
 ## Get comments by stopid
 __Request__
-* Line: GET /comment/stopid/:stopid
+* Line: GET /comment/stop/:stopid
 
 __Response__
 *
@@ -178,6 +178,16 @@ __Response__
 ] // comment list
 ```
 * ``` { "admin": false, "username": null } ```
+
+## Comment on a stop
+__Request__
+* Line: POST /comment/stop/:stopid
+* Body: ```{content: "xxx"}```
+
+__Response__
+* ``` { "comment" : true } ```
+* ``` { "username": null } ```
+
 
 ## Test API
 __Request__
