@@ -31,7 +31,9 @@ var Schema = mongoose.Schema;
 var UserSchema = Schema({
 	username: { type: String, require: true, unique: true },
 	pwd: { type: String, require: true },
-	favourite: [{ type: String }]
+	favourite: [{ type: String }],
+	longtitude: { type: Number },
+	latitude: { type: Number }
 });
 var StopSchema = Schema({
 	stopid: { type: String, require: true , unique: true },
@@ -84,7 +86,7 @@ app.post('/signup', (req, res) => {
 		if(result)
 			res.send({'signup': false});
 		else {
-			UserModel.create({ username: username, pwd: pwd}, (err, result) => {
+			UserModel.create({ username: username, pwd: pwd, favourite: [], longtitude: null, latitude: null}, (err, result) => {
 				if(err)
 					return console.log(err);
 				else
@@ -195,6 +197,34 @@ app.delete('/favourite/:stopname', (req, res) => {
 		res.send({ 'username': null });
 	}
 });
+
+/* add home location */
+app.put('/home/latitude/:latitude/longtitude/:longtitude', (req, res) => {
+	if(req.session.username != undefined && req.session.username != null) {
+		var conditions = {username: req.session.username};
+		var update = {$set: {latitude: req.params.latitude, longtitude: req.params.longtitude}};
+		UserModel.updateOne(conditions, update, (err, result) => {
+			if(err) return console.log(err);
+			res.send({'added': true});
+		})
+	} else {
+		res.send({ 'username': null });
+	}
+})
+/* get home location */
+app.get('/home', (req, res) => {
+	if(req.session.username != undefined && req.session.username != null) {
+		UserModel.findOne({username: req.session.username}, (err, result) => {
+			if(err) return console.log(err);
+			if(result.latitude == null || result.longtitude == null)
+				res.send({'latitude': null, 'longtitude': null});
+			else 
+				res.send({'latitude': result.latitude, 'longtitude': result.longtitude});
+		})
+	} else {
+		res.send({ 'username': null });
+	}
+})
 
 /**** below are all for admin ****/
 /* admin log in */

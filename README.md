@@ -60,6 +60,25 @@ __Response__
 * ``` {"stopRemoved": true} ``` (remove successfully)
 * ``` {"inFavourite": false} ``` (unable to remove it because it"s not in one"s favourite)
 
+
+## Update one's home location
+__Request__
+* Line: PUT /home/latitude/:latitude/longtitude/:longtitude
+
+__Response__
+* ``` {"username": null} ```
+* ``` {"added": true} ``` 
+
+## Get one's home location
+__Request__
+* Line: GET /home
+
+__Response__
+* ``` {"username": null} ```
+* ``` {"latitude": null, "longtitude": null} ``` 
+* ``` {"latitude": 12.22, "longtitude": 3.22} ``` 
+
+
 ## Log in as an admin
 __Request__
 * Line: POST /adminLogIn
