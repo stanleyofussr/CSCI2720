@@ -6,7 +6,14 @@ export default class StopDetail extends React.Component {
 	render() {
 		return (
 			<div className="card p-5 m-6">
-				<Comments stopid={this.props.stopid} />
+				<div className="mb-4">
+					<h3>Location</h3>
+					<Map latitude={this.props.latitude} longtitude={this.props.longtitude}/>
+				</div>
+				<div>
+					<h3>Comment</h3>
+					<Comments stopid={this.props.stopid} />
+				</div>
 			</div>
 		);
 	}
@@ -32,7 +39,6 @@ class Comments extends React.Component {
 	render() {
 		return (
 			<div>
-				<h3>Comment</h3>
 				{this.state.comments.map(comment => <CommentItem username={comment.username} content={comment.content} time={comment.time}/>)}
 			</div>
 		);

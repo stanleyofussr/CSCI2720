@@ -10,7 +10,7 @@ export default class Map extends React.Component{
 		));
 		return (
 			<div>
-				<Stop containerElement={ <div style={{ height: `500px`, width: '500px' }} /> } mapElement={ <div style={{ height: `100%` }} /> }/>
+				<Stop containerElement={ <div style={{ height: `400px`, width: '600px' }} /> } mapElement={ <div style={{ height: `100%` }} /> }/>
 			</div>
 		);
 	}
