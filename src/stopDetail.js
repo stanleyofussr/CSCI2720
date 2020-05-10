@@ -17,9 +17,7 @@ class Comments extends React.Component {
 		this.state = {
 			comments: []
 		}
-	}
-	componentWillReceiveProps(nextProps) {
-		fetch('http://localhost:8000/comment/stopid/' + nextProps.stopid, {
+		fetch('http://localhost:8000/comment/stopid/' + this.props.stopid, {
             method: 'get',
             mode: 'cors',
             credentials: 'include',
