@@ -157,7 +157,6 @@ export default class StopList extends React.Component {
                 if (data.stopRemoved == 1) {
                     console.log(data)
                     var index0 = this.state.favourite.findIndex(element => element.stopname == name);
-                    var index1 = this.state.filteredData.findIndex(element => element.stopname == name)
                     var favorite = this.state.favourite
                     this.setState({
                         temp: favorite.splice(index0, 1),
