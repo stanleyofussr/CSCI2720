@@ -26,6 +26,7 @@ export default class StopList extends React.Component {
             field: "name",
             searchType: "name",
             searchContent: "",
+            detail: false
         };
 
         var stopList;
@@ -218,28 +219,37 @@ export default class StopList extends React.Component {
     handleSearchContent = (e) => {
         this.setState({searchContent: e.target.value});
     }
+    showDetails = (e) => {
+        this.setState({detail: true});
+    }
     render() {
         return (
             <div className="container mt-3">
-                <div className="row d-flex align-items-center">
-                    <div className="col-2"></div>
-                    <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent}/>
-                </div>
-                <div className="row">
-                    <div className="col-6"></div>
-                    <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance}/>
-                </div>
-                <div className="d-flex justify-content-center">
-                    <div className="card-columns mt-3 text-center">
-                        {this.state.filteredData.map(stop =>
-                            <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
-                                addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} />
-                        )}
+                {this.state.detail ? 
+                <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"}/> : 
+                <div>
+                    <div className="row d-flex align-items-center">
+                        <div className="col-2"></div>
+                        <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent}/>
                     </div>
+                    <div className="row">
+                        <div className="col-6"></div>
+                        <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance}/>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <div className="card-columns mt-3 text-center">
+                            {this.state.filteredData.map(stop =>
+                                <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
+                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.showDetails}/>
+                            )}
+                        </div>
+                    </div>
+                    <button className="button btn btn-primary" onClick={(e) => this.sorting("longtitude", "up", e)}>click</button>
                 </div>
-                <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"}/>
-                <button className="button btn btn-primary" onClick={(e) => this.sorting("longtitude", "up", e)}>click</button>
-            </div >
+                }
+                
+                
+            </div>
         )
     }
 }
@@ -275,6 +285,7 @@ class StopItem extends React.Component {
                                     <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 </div>
                             </div>
+                            <button onClick={(e) => this.props.showDetails(e)}>View Details(test)</button>
                         </div>
                     </div>
                 </div>
@@ -299,7 +310,6 @@ class SearchBar extends React.Component {
     }
 }
 class SortBar extends React.Component {
-
     render() {
         return (
             <div>
