@@ -252,15 +252,24 @@ app.get('/stop', (req, res) => {
 		res.send({ 'admin': false, 'username': null });
 	}
 });
-/* add a comment */ /* test only now */
-app.post('/comment', (req, res) => {
-	CommentModel.create({username: "wanru", stopid: "000001", content: "test comment1", time: "2020-01-01"});
-	CommentModel.create({username: "wanru", stopid: "000002", content: "test comment2", time: "2020-01-01"});
-	res.send({'comment': true});
+/* add a comment */ 
+app.post('/comment/stop/:stopid', (req, res) => {
+	if(req.session.username != null && req.session.username != undefined) {
+		var date = new Date();
+		CommentModel.create({username: req.session.username, stopid: req.params.stopid, content: req.body.content, time: date}, (err, result) => {
+			if(err) return console.log(err);
+			StopModel.updateOne({stopid: req.params.stopid}, {$addToSet: {comment: result._id}}, (err, result) => {
+				if(err) return console.log(err);
+				res.send({'comment': true});
+			})
+		});
+	} else {
+		res.send({'username': null});
+	}
 })
 
 /* get comments */ 
-app.get('/comment/stopid/:stopid', (req, res) => {
+app.get('/comment/stop/:stopid', (req, res) => {
 	if(req.session.admin || (req.session.username != null && req.session.username != undefined)) {
 		CommentModel.find({stopid: req.params.stopid}, (err, result) => {
 			if(err)

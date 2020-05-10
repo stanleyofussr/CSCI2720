@@ -73,7 +73,7 @@ class CommentItem extends React.Component {
 	render() {
 		return (
 			<div>
-				<div class="dropdown-divider container"></div>
+				<div className="dropdown-divider"></div>
 				<div className="mt-3 ml-4 mr-4">
 					<h5 style={{ color: "#606270", fontSize: "20px" }}>{this.props.username}:</h5>
 					<p className = "ml-4 mr-4 mb-0" style={{ fontSize: "18px" }}>{this.props.content}</p>
