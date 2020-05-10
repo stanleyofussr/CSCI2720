@@ -259,6 +259,19 @@ app.post('/comment', (req, res) => {
 	res.send({'comment': true});
 })
 
+/* get comments */ 
+app.get('/comment/stopid/:stopid', (req, res) => {
+	if(req.session.admin || (req.session.username != null && req.session.username != undefined)) {
+		CommentModel.find({stopid: req.params.stopid}, (err, result) => {
+			if(err)
+				return console.log(err);
+			res.send(result);
+		});
+	} else {
+		res.send({ 'admin': false, 'username': null });
+	}
+})
+
 /* flush stop data */
 app.post('/flush/stop', (req, res) => {
 	if(req.session.admin) {

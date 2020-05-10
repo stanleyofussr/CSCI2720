@@ -148,8 +148,36 @@ __Request__
 ```
 
 __Response__
+* ```{ 'flush': true }```
+* ```{ 'admin': false }```
 
+## Get comments by stopid
+__Request__
+* Line: GET /comment/stopid/:stopid
 
+__Response__
+*
+```Js
+[ 
+    {
+        "_id": "5eb68a9db0839e58faf92238",
+        "username": "wanru",
+        "stopid": "000001",
+        "content": "test comment",
+        "time": "2020-01-01T00:00:00.000Z",
+        "__v": 0
+    },
+    {
+        "_id": "5eb68ab2b0839e58faf92239",
+        "username": "wanru",
+        "stopid": "000001",
+        "content": "test comment",
+        "time": "2020-01-01T00:00:00.000Z",
+        "__v": 0
+    }
+] // comment list
+```
+* ``` { "admin": false, "username": null } ```
 
 ## Test API
 __Request__
