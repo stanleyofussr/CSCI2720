@@ -10,6 +10,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "history": "^4.10.1",
     "http": "0.0.1-security",
     "jquery": "^3.5.1",
     "mongoose": "^5.9.12",
