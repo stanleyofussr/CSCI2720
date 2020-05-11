@@ -2,12 +2,12 @@ import React from 'react';
 import StopDetail from './stopDetail.js'
 
 const testData = [
-    { stopid: "000001", stopname: "test1", longtitude: 123, latitude: 123, comment: [] },
-    { stopid: "000002", stopname: "test2", longtitude: 143, latitude: 56, comment: [] },
-    { stopid: "000003", stopname: "test3", longtitude: 23, latitude: 11, comment: [] },
-    { stopid: "000004", stopname: "test4", longtitude: 45, latitude: 9, comment: [] },
-    { stopid: "000005", stopname: "test5", longtitude: 12, latitude: 145, comment: [] },
-    { stopid: "000006", stopname: "test6", longtitude: 67, latitude: 123, comment: [] },
+    { stopid: "000001", stopname: "test1",route:"1" , longtitude: 123, latitude: 123, comment: [] },
+    { stopid: "000002", stopname: "test2",route:"2" , longtitude: 143, latitude: 56, comment: [] },
+    { stopid: "000003", stopname: "test3",route:"2" , longtitude: 23, latitude: 11, comment: [] },
+    { stopid: "000004", stopname: "test4",route:"1" , longtitude: 45, latitude: 9, comment: [] },
+    { stopid: "000005", stopname: "test5",route:"3" , longtitude: 12, latitude: 145, comment: [] },
+    { stopid: "000006", stopname: "test6",route:"1" , longtitude: 67, latitude: 123, comment: [] },
 ]
 
 export default class StopList extends React.Component {
@@ -19,7 +19,7 @@ export default class StopList extends React.Component {
             filteredData: testData,
             favourite: [],
             temp: null,
-            page: "stoplist",
+            page: "stop",
             username: this.props.username,
             admin: this.props.admin,
             order: "down",
@@ -68,68 +68,26 @@ export default class StopList extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.page == "favourite") {
-            switch (nextProps.searchType) {
-                case "stopname":
-                    this.setState({
-                        filteredData: this.state.favourite.filter(item => {
-                            if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-                case "longitude":
-                    this.setState({
-                        filteredData: this.state.favourite.filter(item => {
-                            if (item.stopname.toString().includes(nextProps.search))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-                case "latitude":
-                    this.setState({
-                        filteredData: this.state.favourite.filter(item => {
-                            if (item.latitude.toString().includes(nextProps.search))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-            }
+            this.setState({
+                filteredData: this.state.favourite.filter(item => {
+                    if (item.stopname.toLowerCase().includes(this.state.searchContent.toLowerCase()))
+                        return true;
+                    return false;
+                })
+            });
+
         }
         else {
-            switch (nextProps.searchType) {
-                case "stopname":
-                    this.setState({
-                        filteredData: this.state.stopListData.filter(item => {
-                            if (item.stopname.toLowerCase().includes(nextProps.search.toLowerCase()))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-                case "longitude":
-                    this.setState({
-                        filteredData: this.state.stopListData.filter(item => {
-                            if (item.stopname.toString().includes(nextProps.search))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-                case "latitude":
-                    this.setState({
-                        filteredData: this.state.stopListData.filter(item => {
-                            if (item.latitude.toString().includes(nextProps.search))
-                                return true;
-                            return false;
-                        }),
-                    });
-                    break;
-            }
+            this.setState({
+                filteredData: this.state.stopListData.filter(item => {
+                    if (item.stopname.toLowerCase().includes(this.state.searchContent.toLowerCase()))
+                        return true;
+                    return false;
+                })
+            });
         }
     }
+
 
     //FOR USER, add the location to favourite
     addFavHandler = (name, event) => {
@@ -140,7 +98,7 @@ export default class StopList extends React.Component {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.stopAdded == 1) {
+                if (data.stopAdded == true) {
                     var index = this.state.stopListData.findIndex(element => element.stopname == name);
                     var stopData = this.state.stopListData[index];
                     this.setState({
@@ -159,7 +117,7 @@ export default class StopList extends React.Component {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.stopRemoved == 1) {
+                if (data.stopRemoved == true) {
                     console.log(data)
                     var index0 = this.state.favourite.findIndex(element => element.stopname == name);
                     var favorite = this.state.favourite
@@ -216,38 +174,62 @@ export default class StopList extends React.Component {
     searchTypeToRoute = (e) => {
         this.setState({ searchType: "route" });
     }
+
     handleSearchContent = (e) => {
-        this.setState({ searchContent: e.target.value });
+        console.log(e.target.value)
+        var data = null;
+        switch (this.state.page) {
+            case "stop":
+                data = this.state.stopListData;
+                break;
+        
+            case "favourite":
+                data = this.state.favourite;
+                break;
+        }
+        if (this.state.searchType === "name") {
+            this.setState({
+                filteredData: data.filter(item => {
+                    if (item.stopname.toLowerCase().includes(e.target.value.toLowerCase()))
+                        return true;
+                    return false;
+                }),
+                searchContent: e.target.value
+            })
+        } else if (this.state.searchType === "route") {
+            this.setState({
+                filteredData: data.filter(item => {
+                    if (item.route.toLowerCase().includes(e.target.value.toLowerCase()))
+                        return true;
+                    return false;
+                }),
+                searchContent: e.target.value
+            })
+        }
     }
-    showDetails = (e) => {
-        this.setState({ detail: true });
-    }
+
+
     render() {
         return (
             <div className="container mt-3">
-                {this.state.detail ?
-                    <StopDetail latitude={22.283948002091} longtitude={114.15630946053} stopid={"000001"} /> :
-                    <div>
-                        <div className="row d-flex align-items-center">
-                            <div className="col-2"></div>
-                            <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent} />
-                        </div>
-                        <div className="row">
-                            <div className="col-6"></div>
-                            <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance} />
-                        </div>
-                        <div className="d-flex justify-content-center">
-                            <div className="card-columns mt-3 text-center">
-                                {this.state.filteredData.map(stop =>
-                                    <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
-                                        addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.showDetails} />
-                                )}
-                            </div>
+                <div>
+                    <div className="row d-flex align-items-center">
+                        <div className="col-2"></div>
+                        <SearchBar searchType={this.state.searchType} searchTypeToName={this.searchTypeToName} searchTypeToRoute={this.searchTypeToRoute} handleSearchContent={this.handleSearchContent} />
+                    </div>
+                    <div className="row">
+                        <div className="col-6"></div>
+                        <SortBar changeOrder={this.changeOrder} order={this.state.order} fieldToName={this.fieldToName} fieldToRoute={this.fieldToRoute} fieldToDistance={this.fieldToDistance} />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <div className="card-columns mt-3 text-center">
+                            {this.state.filteredData.map(stop =>
+                                <StopItem key={stop._objectID} stopid={stop.stopid} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
+                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.props.detailHandler} />
+                            )}
                         </div>
                     </div>
-                }
-
-
+                </div>
             </div>
         )
     }
@@ -284,7 +266,9 @@ class StopItem extends React.Component {
                                     <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 </div>
                             </div>
-                            <button onClick={(e) => this.props.showDetails(e)}>View Details(test)</button>
+
+                            <div className="mt-3 btn btn-primary btn-sm" onClick={(e) => this.props.showDetails(this.props.stopid, e)} >View Details(test)</div>
+
                         </div>
                     </div>
                 </div>
