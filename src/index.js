@@ -145,7 +145,7 @@ class Project extends React.Component {
 				<NavigationBar username={this.state.username} admin={this.state.admin}
 					logout={this.logout} login={this.login} signup={this.signup} clickStops={this.clickStops} clickFavorUser={this.clickFavorUser} page={this.state.page} />
 				<div id="log"></div>
-				{!this.state.showDetail && (this.state.page == "stops" || this.state.page == "favourite") && (this.state.username != null || this.state.admin) ? <StopList detailHandler={this.showDetail} page={this.state.page} username={this.state.username} /> : null}
+				{!this.state.showDetail && (this.state.page == "stops" || this.state.page == "favourite") && (this.state.username != null || this.state.admin) ? <StopList detailHandler={this.showDetail} admin={this.state.admin} page={this.state.page} username={this.state.username} /> : null}
 				<div id="userList"></div>
 				{this.state.showDetail && (this.state.username != null || this.state.admin) ? <StopDetail close={this.closeDetail} stopid={this.state.detailToShow} /> : null}
 				<div id="stopInfo"></div>

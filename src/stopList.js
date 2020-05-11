@@ -30,7 +30,7 @@ export default class StopList extends React.Component {
         };
 
         var stopList;
-        var favouriteList;
+        var favouriteList = [];
 
         /*
             fetch('http://localhost:8000/stop/', {
@@ -232,8 +232,9 @@ export default class StopList extends React.Component {
                     <div className="d-flex justify-content-center">
                         <div className="card-columns mt-3 text-center">
                             {this.state.filteredData.map(stop =>
-                                <StopItem key={stop._objectID} stopid={stop.stopid} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
-                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} showDetails={this.props.detailHandler} />
+                                <StopItem key={stop._objectID} stopid={stop.stopid} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude}
+                                    commentNum={stop.comment.length} addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} admin={this.state.admin} route={stop.route}
+                                    inFavourite={!this.state.admin ? (this.state.favourite.find(element => element.stopname == stop.stopname)) : null} showDetails={this.props.detailHandler} />
                             )}
                         </div>
                     </div>
@@ -265,18 +266,23 @@ class StopItem extends React.Component {
                                 }
                             </span>
                             <div className="row">
-                                <div className="col-6">
-                                    <h5 className="card-title">Card title</h5>
-                                    <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <div className="col-md-6">
+                                    <h5 className="card-title">Longtitude:</h5>
+                                    <p className="card-text">{this.props.longtitude}</p>
+                                    <h5 className="card-title">Latitude</h5>
+                                    <p className="card-text">{this.props.latitude}</p>
                                 </div>
-                                <div className="col-6">
-                                    <h5 className="card-title">Card title</h5>
-                                    <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <div className="col-md-6 d-flex align-items-center justify-content-center">
+                                    <div>
+                                    <h5 className="card-title">Route:</h5>
+                                    <p className="card-text">{this.props.route}</p>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="mt-3 btn btn-primary btn-sm" onClick={(e) => this.props.showDetails(this.props.stopid, e)} >View Details(test)</div>
-
+                            <div>
+                                <div className="mt-3 btn btn-primary btn-sm mr-1" onClick={(e) => this.props.showDetails(this.props.stopid, e)} >View Details(test)</div>
+                                {this.props.admin ? <div className=" ml-1 mt-3 btn btn-danger btn-sm" onClick={(e) => this.props.showDetails(this.props.stopid, e)} >View Details(test)</div> : null}
+                            </div>
                         </div>
                     </div>
                 </div>
