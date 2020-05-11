@@ -2,12 +2,12 @@ import React from 'react';
 import StopDetail from './stopDetail.js'
 
 const testData = [
-    { stopid: "000001", stopname: "test1",route:"1" , longtitude: 123, latitude: 123, comment: [] },
-    { stopid: "000002", stopname: "test2",route:"2" , longtitude: 143, latitude: 56, comment: [] },
-    { stopid: "000003", stopname: "test3",route:"2" , longtitude: 23, latitude: 11, comment: [] },
-    { stopid: "000004", stopname: "test4",route:"1" , longtitude: 45, latitude: 9, comment: [] },
-    { stopid: "000005", stopname: "test5",route:"3" , longtitude: 12, latitude: 145, comment: [] },
-    { stopid: "000006", stopname: "test6",route:"1" , longtitude: 67, latitude: 123, comment: [] },
+    { stopid: "000001", stopname: "test1", route: "1", longtitude: 123, latitude: 123, comment: [] },
+    { stopid: "000002", stopname: "test2", route: "2", longtitude: 143, latitude: 56, comment: [] },
+    { stopid: "000003", stopname: "test3", route: "2", longtitude: 23, latitude: 11, comment: [] },
+    { stopid: "000004", stopname: "test4", route: "1", longtitude: 45, latitude: 9, comment: [] },
+    { stopid: "000005", stopname: "test5", route: "3", longtitude: 12, latitude: 145, comment: [] },
+    { stopid: "000006", stopname: "test6", route: "1", longtitude: 67, latitude: 123, comment: [] },
 ]
 
 export default class StopList extends React.Component {
@@ -23,7 +23,7 @@ export default class StopList extends React.Component {
             username: this.props.username,
             admin: this.props.admin,
             order: "down",
-            field: "name",
+            field: "stopname",
             searchType: "name",
             searchContent: "",
             detail: false
@@ -128,8 +128,7 @@ export default class StopList extends React.Component {
             })
     }
 
-    //TODO: FOR SORTING
-    sorting = (sortBy, type, event) => {
+    sorting = (sortBy, type) => {
         var sortedData = this.state.filteredData.sort((data1, data2) => {
             var a = data1[sortBy];
             var b = data2[sortBy];
@@ -138,9 +137,7 @@ export default class StopList extends React.Component {
             else
                 return b > a;
         })
-        this.setState({
-            filteredData: sortedData
-        })
+        return sortedData;
     }
 
     //FOR ADMIN, delete the location from database
@@ -153,12 +150,22 @@ export default class StopList extends React.Component {
             return true;
         return false;
     }
+
     changeOrder = (e) => {
         if (this.state.order == "up")
-            this.setState({ order: "down" });
+            this.setState({
+                order: "down"
+            }, this.setState({
+                filteredData: this.sorting(this.state.field, this.state.order)
+            }));
         else
-            this.setState({ order: "up" });
+            this.setState({
+                order: "up"
+            }, this.setState({
+                filteredData: this.sorting(this.state.field, this.state.order)
+            }));
     }
+
     fieldToDistance = (e) => {
         this.setState({ field: "dist" });
     }
@@ -168,6 +175,7 @@ export default class StopList extends React.Component {
     fieldToRoute = (e) => {
         this.setState({ field: "route" });
     }
+
     searchTypeToName = (e) => {
         this.setState({ searchType: "name" });
     }
@@ -182,7 +190,7 @@ export default class StopList extends React.Component {
             case "stop":
                 data = this.state.stopListData;
                 break;
-        
+
             case "favourite":
                 data = this.state.favourite;
                 break;
@@ -321,8 +329,4 @@ class SortBar extends React.Component {
             </div>
         );
     }
-}
-
-class SortSelector extends React.Component {
-
 }
