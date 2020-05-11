@@ -141,8 +141,22 @@ export default class StopList extends React.Component {
     }
 
     //FOR ADMIN, delete the location from database
-    delItemHandler = event => {
-        //TODO Ajax
+    delItemHandler = (index, event) => {
+        //Test version
+        fetch('http://localhost:8000/stop/' + index, {
+            method: 'DELETE',
+            mode: 'cors',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.stopDeleted) {
+                alert('del item done.')
+                this.setState({
+                    stopListData: this.state.stopListData.splice(index, 1)
+                })
+            }
+        })
     }
 
     inFavChecker = (value, item) => {
@@ -231,11 +245,17 @@ export default class StopList extends React.Component {
                     </div>
                     <div className="d-flex justify-content-center">
                         <div className="card-columns mt-3 text-center">
-                            {this.state.filteredData.map(stop =>
-                                <StopItem key={stop._objectID} stopid={stop.stopid} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude}
-                                    commentNum={stop.comment.length} addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} admin={this.state.admin} route={stop.route}
-                                    inFavourite={!this.state.admin ? (this.state.favourite.find(element => element.stopname == stop.stopname)) : null} showDetails={this.props.detailHandler} />
-                            )}
+                        {!this.state.admin?
+                            this.state.filteredData.map(stop =>
+                                <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
+                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} 
+                                    delItemHandler={this.delItemHandler}/>
+                            ):
+
+                            this.state.filteredData.map(stop =>
+                                <StopItem key={stop._objectID} stopName={stop.stopname} longtitude={stop.longtitude} latitude={stop.latitude} commentNum={stop.comment.length}
+                                    addFavHandler={this.addFavHandler} delFavHandler={this.delFavHandler} inFavourite={this.state.favourite.find(element => element.stopname == stop.stopname)} />
+                        )}
                         </div>
                     </div>
                 </div>
